@@ -1,0 +1,29 @@
+html {
+    scroll-behavior: smooth;
+}
+
+.formQuestion {
+    height: 800;
+    padding: 20px;
+    text-align: center;
+}
+
+p,
+label {
+    font: Bahnschrift, Roboto;
+    font-size: 18px;
+    color: #3d3d3d;
+}
+
+h1 {
+    font: Bahnschrift, Roboto;
+    font-size: 28px;
+    color: #6b0504;
+}
+
+.formQuestion {
+    border: 0px;
+    border-radius: 25px;
+    background-color: #f9e0d9;
+    margin: 20px;
+}

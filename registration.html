@@ -1,0 +1,70 @@
+<!doctype html>
+
+<html>
+
+<head>
+    <title>Registration</title>
+    <link rel="stylesheet" href="CSS/registration.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <!--
+		<img src= "images/myImage.jpg">
+		-->
+    <script src="JS/main.js"></script>
+
+</head>
+
+<body>
+    <div class="divQuestion" id="intro">
+        <form class="formQuestion">
+            <h1>Hello Cindy!</h1>
+            <p>We know that running a restaurant can be difficult, and you'd rather being focusing on food, not spreadsheets!</p>
+            <p>So we will build an experience tailored to you, SweetPickle is not just another piece of software but a learning experience!</p>
+            <p>To get us started we’ll need to learn a little more about you and your restaurant… </p>
+            <a href="#q1" class="button">Let's Get Started!</a>
+        </form>
+    </div>
+
+    <div class="divQuestion" id="q1">
+        <form class="formQuestion">
+            <label>What is the name of your restaurant?</label><br>
+            <input type="text" id="restName" name="restName" required=true>
+            <a href="#intro" class="button">Previous</a>
+            <a href="#q2" class="button">Next</a>
+        </form>
+    </div>
+
+    <div class="divQuestion" id="q2">
+        <form class="formQuestion">
+            <label>How would you rate your technical skills?</label><br>
+            <input list="skills" id="skill" name="skill" required=true>
+            <datalist id="skills">
+                <option value="I'm a Newbie"></option>
+                <option value="Some skills"></option>
+                <option value="Very skilled!"></option>
+            </datalist>
+            <a href="#q1" class="button">Previous</a>
+            <a href="#q3" class="button">Next</a>
+        </form>
+    </div>
+    <div class="divQuestion" id="q3">
+        <form class="formQuestion">
+            <label>What type of restaurant would you (primarily) identify as?</label><br>
+            <input list="types" id="type" name="type" required=true>
+            <datalist id="types">
+                <option value="Fast Casual"></option>
+                <option value="Family Style"></option>
+                <option value="Fine Dining"></option>
+                <option value="Cafe or Bistro"></option>
+                <option value="Fast Food"></option>
+                <option value="Food Truck"></option>
+                <option value="Cafe or Bistro"></option>
+                <option value="Buffet"></option>
+                <option value="Bar or Nightclub"></option>
+            </datalist>
+        </form>
+        <a href="#q2" class="button">Previous</a>
+        <a href="profile.html" class="button">All Finished!</a>
+    </div>
+</body>
+
+</html>

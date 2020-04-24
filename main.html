@@ -1,0 +1,41 @@
+<!doctype html>
+
+<html>
+
+<head>
+    <title>Sweet Pickle - Profitability for Restaurants</title>
+    <link rel="stylesheet" href="CSS/main.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <!--
+		<img src= "images/myImage.jpg">
+		-->
+    <script src="JS/main.js"></script>
+
+</head>
+
+<body>
+    <div class="topnav" id="myTopnav">
+        <a href="home.html" class="menu" target="iframeMain">HOME</a>
+        <a href="facts.html" class="menu" target="iframeMain">FACTS</a>
+        <a href="tasks.html" class="menu" target="iframeMain">TASKS</a>
+        <a href="figures.html" class="menu" target="iframeMain">FIGURES</a>
+
+        <a href="#help" class="appMenu">
+            <img src="IMAGES/Help - White.png" alt="Help Menu" class="menuImage">
+        </a>
+        <a href="#user" class="appMenu">
+            <img src="IMAGES/Profile - White.png" alt="Profile Menu" class="menuImage">
+        </a>
+        <a href="javascript:void(0);" class="icon" onclick="myFunction()">
+            <i class="fa fa-bars"></i>
+        </a>
+    </div>
+
+    <!-- Main iFrame for desktop pages -->
+    <div style="--aspect-ratio: 16/9;">
+        <iframe src="home.html" name="iframeMain" width="1600" height="900" frameborder="0">
+        </iframe>
+    </div>
+</body>
+
+</html>
