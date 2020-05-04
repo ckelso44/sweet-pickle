@@ -1,0 +1,128 @@
+@import "main.css";
+
+/* styling for main tasks page */
+
+#taskFrame {
+    display: inline;
+}
+
+hr {
+    height: 1px;
+    color: var(--Colour-0);
+    background-color: var(--Colour-0);
+    border: none;
+}
+
+
+/* styling for take sheets*/
+
+body {
+    font-family: Bahnschrift, Roboto;
+}
+
+#navPageDiv {
+    text-align: center;
+}
+
+.navPageItem {
+    color: var(--Colour-1);
+    font-size: 42px;
+}
+
+a.navPageItem {
+    text-decoration: none;
+}
+
+
+/* styling for take summary*/
+
+.stdDiv {
+    background-color: var(--Colour-2);
+    border-radius: 15px;
+    padding: 15px;
+    margin: 20px;
+}
+
+#sumTable {
+    border-radius: 10px;
+    border: 0px;
+    width: 100%;
+    border-collapse: collapse;
+}
+
+#sumTable tr:first-child th:first-child {
+    border-top-left-radius: 10px;
+}
+
+#sumTable tr:first-child th:last-child {
+    border-top-right-radius: 10px;
+}
+
+#sumTable tr:nth-child(3) td:first-child,
+#sumTable tr:last-child td:nth-child(3) {
+    border-bottom-left-radius: 5px;
+}
+
+#sumTable tr:last-child td:last-child {
+    border-bottom-right-radius: 5px;
+}
+
+.sumRow {
+    background-color: var(--Colour-4);
+}
+
+.sumValue,
+.sumValueTotal {
+    background-color: var(--Colour-5);
+    text-align: right;
+}
+
+.sumValue::before,
+.sumValueTotal::before {
+    content: "$ ";
+}
+
+th {
+    background-color: var(--Colour-4);
+    padding-right: 5px;
+}
+
+td {
+    width: 25%;
+    border-style: none;
+    padding: 3px 10px 3px 10px;
+}
+
+.sumValue {
+    text-emphasis: strong;
+}
+
+.sumValueTotal {
+    border-width: 1px 0px 0px 0px;
+    border-style: solid;
+    border-color: var(--Colour-2);
+    text-emphasis: strong;
+}
+
+#sumTakeText {
+    text-emphasis: strong;
+    text-align: right;
+    color: var(--Colour-5);
+    background-color: var(--Colour-2);
+    padding-right: 5px;
+}
+
+.leftDetail,
+.rightDetail {
+    background-color: var(--Colour-5);
+    border: 0px;
+    border-radius: 5px;
+    width: 150px;
+    padding: 5px;
+    display: inline-block;
+    margin: 5px;
+}
+
+.rightDetail {
+    float: right;
+}

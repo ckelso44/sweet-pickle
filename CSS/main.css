@@ -1,21 +1,39 @@
+/* GLobal variable list to set font and sizing */
+
+:root {
+    --Colour-0: #000000;
+    --Colour-1: #6b0504;
+    --Colour-2: #a31621;
+    --Colour-3: #b4464f;
+    --Colour-4: #f9e0d9;
+    --Colour-5: #fdffff;
+}
+
+h1 {
+    text-align: center;
+    color: var(--Colour-1);
+    font-size: 42px;
+}
+
+
 /* with credit - https://www.w3schools.com/howto/tryit.asp?filename=tryhow_js_topnav
 */
 
 body {
-    margin: 0;
-    font-family: Arial, Helvetica, sans-serif;
+    margin: 0px;
+    font-family: Bahnschrift, Roboto;
 }
 
 .topnav {
     overflow: hidden;
-    background-color: #6b0504;
+    background-color: var(--Colour-2);
     border: 0px;
 }
 
 .topnav a {
     float: left;
     display: block;
-    color: #fdffff;
+    color: var(--Colour-5);
     text-align: center;
     padding: 14px 16px;
     text-decoration: none;
@@ -28,19 +46,19 @@ body {
 }
 
 .menuImage {
-    width: 25px;
-    height: 25px;
+    width: 31px;
+    height: 31px;
     border: 0px;
 }
 
 .topnav a:hover {
-    background-color: #f9e0d9;
-    color: black;
+    background-color: var(--Colour-5);
+    color: var(--Colour-0);
 }
 
 .topnav a.active {
-    background-color: #b4464f;
-    color: white;
+    background-color: var(--Colour-3);
+    color: var(--Colour-5);
 }
 
 .topnav .icon {
@@ -122,7 +140,7 @@ Credit - https://www.w3schools.com/howto/howto_css_fixed_sidebar.asp
     top: 0;
     /* Stay at the top */
     left: 0;
-    background-color: #a31621;
+    background-color: var(--Colour-2);
     /* Black */
     overflow-x: hidden;
     /* Disable horizontal scroll */
@@ -136,7 +154,7 @@ Credit - https://www.w3schools.com/howto/howto_css_fixed_sidebar.asp
     padding: 6px 8px 6px 16px;
     text-decoration: none;
     font-size: 25px;
-    color: #000000;
+    color: var(--Colour-0);
     display: block;
 }
 
@@ -144,7 +162,7 @@ Credit - https://www.w3schools.com/howto/howto_css_fixed_sidebar.asp
 /* When you mouse over the navigation links, change their color */
 
 .sidenav a:hover {
-    color: #f1f1f1;
+    color: var(--Colour-5);
 }
 
 

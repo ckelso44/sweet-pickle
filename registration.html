@@ -20,36 +20,39 @@
             <p>We know that running a restaurant can be difficult, and you'd rather being focusing on food, not spreadsheets!</p>
             <p>So we will build an experience tailored to you, SweetPickle is not just another piece of software but a learning experience!</p>
             <p>To get us started we’ll need to learn a little more about you and your restaurant… </p>
-            <a href="#q1" class="button">Let's Get Started!</a>
         </form>
+        <a href="#q1" class="button">Let's Get Started!</a>
     </div>
 
     <div class="divQuestion" id="q1">
+        <a href="#intro" class="button">Previous</a>
         <form class="formQuestion">
             <label>What is the name of your restaurant?</label><br>
-            <input type="text" id="restName" name="restName" required=true>
-            <a href="#intro" class="button">Previous</a>
-            <a href="#q2" class="button">Next</a>
+            <input type="text" id="restName" class="regInput" required=true>
         </form>
+        <div>
+            <a href="#q2" class="button">Next</a>
+        </div>
     </div>
 
     <div class="divQuestion" id="q2">
+        <a href="#q1" class="button">Previous</a>
         <form class="formQuestion">
             <label>How would you rate your technical skills?</label><br>
-            <input list="skills" id="skill" name="skill" required=true>
+            <input list="skills" id="skill" class="regInput" required=true>
             <datalist id="skills">
                 <option value="I'm a Newbie"></option>
                 <option value="Some skills"></option>
                 <option value="Very skilled!"></option>
             </datalist>
-            <a href="#q1" class="button">Previous</a>
-            <a href="#q3" class="button">Next</a>
         </form>
+        <a href="#q3" class="button">Next</a>
     </div>
     <div class="divQuestion" id="q3">
+        <a href="#q2" class="button">Previous</a>
         <form class="formQuestion">
             <label>What type of restaurant would you (primarily) identify as?</label><br>
-            <input list="types" id="type" name="type" required=true>
+            <input list="types" id="type" class="regInput" required=true>
             <datalist id="types">
                 <option value="Fast Casual"></option>
                 <option value="Family Style"></option>
@@ -62,7 +65,6 @@
                 <option value="Bar or Nightclub"></option>
             </datalist>
         </form>
-        <a href="#q2" class="button">Previous</a>
         <a href="profile.html" class="button">All Finished!</a>
     </div>
 </body>

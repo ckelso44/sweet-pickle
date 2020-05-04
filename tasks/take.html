@@ -1,0 +1,96 @@
+<!doctype html>
+
+<html>
+
+<head>
+    <title>Sweet Pickle - Facts Page</title>
+    <link rel="stylesheet" href="../CSS/main.css">
+    <link rel="stylesheet" href="../CSS/tasks.css">
+    <!--
+    
+		<img src= "images/myImage.jpg">
+		-->
+    <script src="../JS/main.js"></script>
+    <script src="../JS/tasks.js"></script>
+
+</head>
+
+<body>
+    <div id="navPageDiv">
+        <a href="take.html" class="navPageItem">&#171</a>
+        <span class="navPageItem" id="dayOfWeek">Day of Week</span>
+        <a href="take.html" class="navPageItem">&#187</a>
+        <br>
+        <span class="navPageItem">+/- Budget: </span>
+        <span class="navPageItem" id="sumProfit">Tasks Outstanding</span>
+    </div>
+    <div class="stdDiv" id="dailyTakeSummary">
+        <table id="sumTable">
+            <thead>
+                <tr>
+                    <th>Payment</th>
+                    <th>Expected</th>
+                    <th>Actual</th>
+                    <th>Difference</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="sumRow">Cash & PC</td>
+                    <td class="sumValue" id="CPCExpected">0</td>
+                    <td class="sumValue" id="CPCActual">0</td>
+                    <td class="sumValue" id="CPCDiff">0</td>
+                </tr>
+                <tr>
+                    <td class="sumRow">Credit</td>
+                    <td class="sumValue" id="creditExpected">0</td>
+                    <td class="sumValue" id="creditActual">0</td>
+                    <td class="sumValue" id="creditDiff">0</td>
+                </tr>
+                <tr>
+                    <td class="sumRow">Debit</td>
+                    <td class="sumValue" id="debitExpected">0</td>
+                    <td class="sumValue" id="debitActual">0</td>
+                    <td class="sumValue" id="debitDiff">0</td>
+                </tr>
+                <tr>
+                    <td class="blankCell"></td>
+                    <td class="sumValueText" id="sumTakeText">Current Daily Take</td>
+                    <td class="sumValueTotal" id="actualSum">0</td>
+                    <td class="sumValueTotal" id="diffSum">0</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <!-- Additional Details section for total take sheets-->
+    <div class="stdDiv" id="detailsDiv">
+        <div class="leftDetail">
+            <span>GST: </span>
+            <span id="GST">0</span>
+        </div>
+        <div class="rightDetail">
+            <span>Budget: </span>
+            <span id="budget">0</span>
+        </div>
+        <br>
+        <div class="leftDetail">
+            <span>PST: </span>
+            <span id="PST">0</span>
+        </div>
+        <div class="rightDetail">
+            <span>Net Total: </span>
+            <span id="netTotal">0</span>
+        </div>
+    </div>
+
+    <div id="progressDiv">
+        <table id="progressTable">
+        </table>
+    </div>
+    <div id="sheetsDiv">
+
+    </div>
+    <button type="button" onclick="loadMainPage()">Click Me!</button>
+</body>
+
+</html>

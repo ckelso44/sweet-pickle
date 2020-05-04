@@ -1,29 +1,54 @@
 html {
     scroll-behavior: smooth;
+    font-family: Bahnschrift, Roboto;
 }
 
-.formQuestion {
-    height: 800;
+.divQuestion {
+    height: 800px;
     padding: 20px;
     text-align: center;
 }
 
 p,
 label {
-    font: Bahnschrift, Roboto;
-    font-size: 18px;
+    font-size: 28px;
     color: #3d3d3d;
 }
 
 h1 {
-    font: Bahnschrift, Roboto;
-    font-size: 28px;
+    font-size: 42px;
     color: #6b0504;
 }
 
 .formQuestion {
     border: 0px;
     border-radius: 25px;
-    background-color: #f9e0d9;
-    margin: 20px;
+    background-image: linear-gradient( #f9e0d9, #fdfdfd);
+    padding: 20px;
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+
+.regInput[type="text"],
+.regInput[list="skills"],
+.regInput[list="types"] {
+    border: 0px;
+    border-radius: 5px;
+    font-family: Bahnschrift, Roboto;
+    padding: 5px;
+    font-size: 20px;
+    text-align: center;
+    margin-top: 10px;
+}
+
+.button {
+    text-decoration: none;
+    border-radius: 20px;
+    padding: 10px;
+    font-family: Bahnschrift, Roboto;
+    font-weight: bold;
+    font-size: 20px;
+    background-color: #6b0504;
+    color: #fdffff;
+    display: block;
 }
