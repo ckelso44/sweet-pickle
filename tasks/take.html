@@ -66,29 +66,36 @@
     <div class="stdDiv" id="detailsDiv">
         <div class="leftDetail">
             <span>GST: </span>
-            <span id="GST">0</span>
+            <span class="detailTotal" id="GST">0</span>
         </div>
         <div class="rightDetail">
             <span>Budget: </span>
-            <span id="budget">0</span>
+            <span class="detailTotal" id="budget">0</span>
         </div>
         <br>
         <div class="leftDetail">
             <span>PST: </span>
-            <span id="PST">0</span>
+            <span class="detailTotal" id="PST">0</span>
         </div>
         <div class="rightDetail">
             <span>Net Total: </span>
-            <span id="netTotal">0</span>
+            <span class="detailTotal" id="netTotal">0</span>
         </div>
     </div>
 
-    <div id="progressDiv">
+
+    <!-- Insert a Progress bar above the individual Take Sheets -->
+    <div class="stdDiv" id="progressDiv">
+        <h2>Progress bar</h2>
+        <label for="takeProgress">Take Sheets Completed: </label>
+        <progress id="takeProgress" value="25" max="100"> 0% </progress>
         <table id="progressTable">
         </table>
     </div>
-    <div id="sheetsDiv">
-
+    <!-- Create a list of take sheets... maybe in a grid? 
+        Selecting one will open the details to edit in a modal page-->
+    <div class="stdDiv" id="sheetsDiv">
+        <h2>Take Sheets</h2>
     </div>
     <button type="button" onclick="loadMainPage()">Click Me!</button>
 </body>

@@ -78,8 +78,13 @@ a.navPageItem {
 }
 
 .sumValue::before,
-.sumValueTotal::before {
+.sumValueTotal::before,
+.detailTotal::before {
     content: "$ ";
+}
+
+.detailTotal {
+    float: right;
 }
 
 th {
@@ -125,4 +130,8 @@ td {
 
 .rightDetail {
     float: right;
+}
+
+#progressDiv {
+    background-color: white;
 }
