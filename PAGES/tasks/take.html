@@ -4,18 +4,20 @@
 
 <head>
     <title>Sweet Pickle - Facts Page</title>
-    <link rel="stylesheet" href="../CSS/main.css">
-    <link rel="stylesheet" href="../CSS/tasks.css">
+    <link rel="stylesheet" href="../../CSS/main.css">
+    <link rel="stylesheet" href="../../CSS/tasks.css">
     <!--
     
 		<img src= "images/myImage.jpg">
 		-->
     <script src="../JS/main.js"></script>
     <script src="../JS/tasks.js"></script>
+    <script src="../JS/collapse.js"></script>
+
 
 </head>
 
-<body>
+<body onload="onLoadTask()">
     <div id="navPageDiv">
         <a href="take.html" class="navPageItem">&#171</a>
         <span class="navPageItem" id="dayOfWeek">Day of Week</span>
@@ -94,9 +96,40 @@
     </div>
     <!-- Create a list of take sheets... maybe in a grid? 
         Selecting one will open the details to edit in a modal page-->
-    <div class="stdDiv" id="sheetsDiv">
-        <h2>Take Sheets</h2>
+    <h2>Take Sheets</h2>
+
+    <div class="takeSheetDiv">
+        <button type="button" class="collapsible">
+            <span class="buttonText">1</span>
+            <div class="leftDetail">
+                <span>Expected: </span>
+                <span class="detailTotal" id="PST">0</span>
+            </div>
+            <div class="rightTextDetail">
+                <span>Task Complete!</span>
+            </div>
+            <br>
+            <span class="buttonText">+</span>
+            <div class="leftDetail">
+                <span>Expected: </span>
+                <span class="detailTotal" id="PST">0</span>
+            </div>
+            <div class="centerDetail">
+                <span>Actual: </span>
+                <span class="detailTotal" id="netTotal">0</span>
+            </div>  
+            <div class="rightDetail">
+                <span>Net Difference: </span>
+                <span class="detailTotal" id="netTotal">0</span>
+            </div>
+            
+            </button>
     </div>
+    <div class="content">
+        <p>Lorem ipsum...</p>
+    </div>
+
+    <br>
     <button type="button" onclick="loadMainPage()">Click Me!</button>
 </body>
 

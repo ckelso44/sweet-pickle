@@ -1,0 +1,39 @@
+<!doctype html>
+
+<html>
+
+<head>
+    <title>Login - Sweet Pickle</title>
+
+    <link rel="stylesheet" href="css/default.css">
+
+    <script src="JS/toolkit.js"></script>
+    <script src="JS/login.js"></script>
+</head>
+
+<body>
+    <div>
+        <h2>Login to Sweet Pickle</h2>
+        <form>
+            <fieldset>
+                <p class="errorMsg" id="loginErr" hidden>Your email and password do not match, please try again or register as a new user.</p>
+                <span><label>email: 
+                        <input type='text' id = 'uEmail' required>
+                    </label>
+                </span>
+                <span>
+                    <label>password: 
+                        <input type='password' id = 'uPassword' required>
+                    </label>
+                </span>
+                <span class="buttonSpan">
+                    <input type="button" id="login" value="Login" onclick="loginUser()">
+                </span>
+                <p>Forgot Password? No problem,<a href="forgotPassword.html">register</a> as a new user</p>
+
+            </fieldset>
+        </form>
+    </div>
+</body>
+
+</html>
