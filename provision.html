@@ -1,0 +1,123 @@
+<!doctype html>
+
+<html>
+
+<head>
+    <title>Sweet Pickle - Restaurant Provisioning Page</title>
+
+    <link rel="stylesheet" href="CSS/provision.css">
+    <link rel="stylesheet" href="CSS/default.css">
+
+    <script src="JS/toolkit.js"></script>
+    <script src="JS/provision.js"></script>
+
+</head>
+
+<body>
+    <div class="containerDiv">
+        <h1 class="containerDiv">Provision a new Restaurant</h1>
+        <form action="onSubmit">
+            <fieldset>
+                <div id="userDetailsDiv">
+                    <h2>User Details</h2>
+                    <span>
+                        <label>full name: 
+                            <input type='text' id = 'fName' required placeholder="Patricia Mangr">
+                        </label>
+                    </span>
+                    <span>
+                        <label>preferred name: 
+                            <input type='text' id = 'pName' placeholder="Patsy">
+                        </label>
+                    </span>
+                    <span>    
+                        <label>email: 
+                            <input type='text' id = 'email' required placeholder="patsy@MyEatery.xxx" value="test@example.com">
+                        </label>
+                    </span>
+                    <span>
+                        <label>password: 
+                            <input type='text' id = 'password' required placeholder="SuperSecret#!84"> 
+                        </label>
+                    </span>
+                    <span>
+                        <label id="userProgress">Status: Not Generated</label>
+                        <label> userID: 
+                            <input type="text" id="userID" disabled oninput="onUserIDChange()">
+                        </label>
+                    </span>
+                </div>
+
+                <div id="restaurantDiv">
+                    <h2>Restaurant Details</h2>
+
+                    <span>
+                        <label>restaurant name: 
+                            <input type='text' id = 'rName' required placeholder="My Eatery">
+                        </label>
+                    </span>
+                    <span>    
+                        <label>country: 
+                            <input list="countries" id= "country" name="country" required>
+                            <datalist id="countries">
+                                <option value="Canada"></option>
+                                <option value="United States"></option>
+                            </datalist>
+                        </label>
+                        <label>region: 
+                            <input type='text' id = 'region' required>
+                        </label>
+                        <label>City: 
+                            <input type='text' id = 'city' required>
+                        </label>
+                        <label>address (Street): 
+                            <input type='text' id = 'address' required>
+                        </label>
+                        <label>address (Unit Number): 
+                            <input type='text' id = 'address2' required>
+                        </label>
+                        <label>code (postal or zip): 
+                            <input type='text' id = 'code' required>
+                        </label>
+                    </span>
+                    <span>
+                        <label id="restaurantProgress">Status: Not Generated</label>
+                    <label> restaurantID: 
+                        <input type="text" id="resID" disabled>
+                    </label>
+                </span>
+                </div>
+                <div>
+                    <h1>Select to Provision Details</h1>
+                    <span class="buttonSpan">
+                        <input type="button" id="provision" value="Start Provision Process" onclick="provisionUser()">
+                    </span>
+                    <p id="sumDetails">Details to follow...</p>
+                </div>
+            </fieldset>
+        </form>
+    </div>
+
+</body>
+
+<!-- The Modal -->
+<div id="myModal" class="modal">
+
+    <!-- Modal content -->
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2 id="mHeader">Modal Header</h2>
+        </div>
+        <div class="modal-body">
+            <p id="mBody">Some text in the Modal Body</p>
+            <p id="mDetails"></p>
+        </div>
+        <div class="modal-footer">
+            <span class="mButton" id="mButtonConfirm">Confirm</span>
+            <span class="mButton" id="mButtonCancel">Cancel</span>
+        </div>
+    </div>
+
+</div>
+
+</html>

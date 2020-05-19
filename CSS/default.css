@@ -1,12 +1,26 @@
-/* GLobal variable list to set font and sizing */
+/* GLobal variable list to set font and sizing 
 
 :root {
     --Colour-0: #000000;
     --Colour-1: #6b0504;
     --Colour-2: #a31621;
     --Colour-3: #b4464f;
-    --Colour-4: #22a316;
+    --Colour-4: #f9e0d9;
     --Colour-5: #fdffff;
+}
+
+*/
+
+
+/* Option 2 */
+
+:root {
+    --Colour-0: #011627;
+    --Colour-1: #f71735;
+    --Colour-2: #41ead4;
+    --Colour-3: #fdfffc;
+    --Colour-4: #ff9f1c;
+    --Colour-5: #fdfffc;
 }
 
 h1 {
@@ -17,7 +31,7 @@ h1 {
 
 h2 {
     text-align: center;
-    color: var(--Colour-5);
+    color: var(--Colour-0);
     font-size: 36px;
 }
 
@@ -26,8 +40,7 @@ html {
 }
 
 div {
-    background-color: var(--Colour-2);
-    margin: 2%;
+    background-color: var(--Colour-5);
     padding: 2%;
     text-align: justify;
     align-items: center;
@@ -37,16 +50,17 @@ div {
     border-color: var(--Colour-0);
     max-width: 700px;
     margin: 0 auto;
+    margin-bottom: 5px;
 }
 
 p {
-    color: var(--Colour-5);
+    color: var(--Colour-1);
     font-size: large;
     text-align: center;
 }
 
 label {
-    color: var(--Colour-0);
+    color: var(--Colour-3);
     font-size: large;
     display: block;
     padding: 5px;
@@ -57,7 +71,7 @@ fieldset {
 }
 
 span {
-    background-color: var(--Colour-4);
+    background-color: var(--Colour-1);
     padding: 5px;
     display: block;
     margin: 10px;
@@ -65,13 +79,14 @@ span {
 }
 
 input[type=text],
-input[type=password] {
+input[type=password],
+input[list] {
     display: block;
     border-style: none;
     width: 100%;
     background-color: var(--Colour-5);
     border-radius: 3px;
-    height: 20px;
+    height: 25px;
 }
 
 
@@ -100,5 +115,5 @@ input[type=button] {
 /* Add a hover effect for buttons */
 
 input[type=button]:hover {
-    background-color: var(--Colour-3);
+    background-color: var(--Colour-2);
 }
