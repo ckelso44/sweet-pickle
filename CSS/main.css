@@ -1,17 +1,17 @@
 /* GLobal variable list to set font and sizing */
 
 :root {
-    --Colour-0: #000000;
-    --Colour-1: #6b0504;
-    --Colour-2: #a31621;
-    --Colour-3: #b4464f;
-    --Colour-4: #f9e0d9;
-    --Colour-5: #fdffff;
+    --Colour-0: #011627;
+    --Colour-1: #812feb;
+    --Colour-2: #7fa2c8;
+    --Colour-3: #7fc8c5;
+    --Colour-4: #ebebeb;
+    --Colour-5: #fdfffc;
 }
 
 h1 {
     text-align: center;
-    color: var(--Colour-1);
+    color: var(--Colour-0);
     font-size: 42px;
 }
 
@@ -140,7 +140,7 @@ Credit - https://www.w3schools.com/howto/howto_css_fixed_sidebar.asp
     top: 0;
     /* Stay at the top */
     left: 0;
-    background-color: var(--Colour-2);
+    background-color: var(--Colour-0);
     /* Black */
     overflow-x: hidden;
     /* Disable horizontal scroll */
@@ -154,7 +154,7 @@ Credit - https://www.w3schools.com/howto/howto_css_fixed_sidebar.asp
     padding: 6px 8px 6px 16px;
     text-decoration: none;
     font-size: 25px;
-    color: var(--Colour-0);
+    color: var(--Colour-5);
     display: block;
 }
 
@@ -162,7 +162,7 @@ Credit - https://www.w3schools.com/howto/howto_css_fixed_sidebar.asp
 /* When you mouse over the navigation links, change their color */
 
 .sidenav a:hover {
-    color: var(--Colour-5);
+    color: var(--Colour-3);
 }
 
 

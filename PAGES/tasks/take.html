@@ -10,9 +10,9 @@
     
 		<img src= "images/myImage.jpg">
 		-->
-    <script src="../JS/main.js"></script>
-    <script src="../JS/tasks.js"></script>
-    <script src="../JS/collapse.js"></script>
+    <script src="../../JS/main.js"></script>
+    <script src="../../JS/tasks.js"></script>
+    <script src="../../JS/collapse.js"></script>
 
 
 </head>
@@ -27,7 +27,7 @@
         <span class="navPageItem" id="sumProfit">Tasks Outstanding</span>
     </div>
     <div class="stdDiv" id="dailyTakeSummary">
-        <table id="sumTable">
+        <table class="sumTable">
             <thead>
                 <tr>
                     <th>Payment</th>
@@ -94,20 +94,20 @@
         <table id="progressTable">
         </table>
     </div>
+
     <!-- Create a list of take sheets... maybe in a grid? 
         Selecting one will open the details to edit in a modal page-->
     <h2>Take Sheets</h2>
 
     <div class="takeSheetDiv">
+        <input type="text" id="takeID" value="0" hidden>
         <button type="button" class="collapsible">
             <span class="buttonText">1</span>
             <div class="leftDetail">
-                <span>Expected: </span>
-                <span class="detailTotal" id="PST">0</span>
+                <span id="managerName">Jerri: </span>
+                <span class="sumTakeText" id="shift">Day Shift</span>
             </div>
-            <div class="rightTextDetail">
-                <span>Task Complete!</span>
-            </div>
+            <span class="rightTextDetail">Task Complete!</span>
             <br>
             <span class="buttonText">+</span>
             <div class="leftDetail">
@@ -117,17 +117,59 @@
             <div class="centerDetail">
                 <span>Actual: </span>
                 <span class="detailTotal" id="netTotal">0</span>
-            </div>  
+            </div>
             <div class="rightDetail">
                 <span>Net Difference: </span>
                 <span class="detailTotal" id="netTotal">0</span>
             </div>
-            
-            </button>
+        </button>
+        <div class="content">
+            <table class="sumTable">
+                <thead>
+                    <tr>
+                        <th>Payment</th>
+                        <th>Expected</th>
+                        <th>Actual</th>
+                        <th>Difference</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="sumRow">Cash</td>
+                        <td class="sumValue" id="cExpected">0</td>
+                        <td class="sumValue" id="cActual">0</td>
+                        <td class="sumValue" id="cDiff">0</td>
+                    </tr>
+                    <tr>
+                        <td class="sumRow">PC</td>
+                        <td class="sumValue" id="PCExpected">0</td>
+                        <td class="sumValue" id="PCActual">0</td>
+                        <td class="sumValue" id="PCDiff">0</td>
+                    </tr>
+                    <tr>
+                        <td class="sumRow">Credit</td>
+                        <td class="sumValue" id="creditExpected">0</td>
+                        <td class="sumValue" id="creditActual">0</td>
+                        <td class="sumValue" id="creditDiff">0</td>
+                    </tr>
+                    <tr>
+                        <td class="sumRow">Debit</td>
+                        <td class="sumValue" id="debitExpected">0</td>
+                        <td class="sumValue" id="debitActual">0</td>
+                        <td class="sumValue" id="debitDiff">0</td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="leftDetail">
+                <button class="takeButton">Edit Take Sheet</button>
+            </div>
+        </div>
     </div>
-    <div class="content">
-        <p>Lorem ipsum...</p>
-    </div>
+    <br>
+
+    <span id="takeSheetSpan">
+        <p>My Divs</p>
+    </span>
 
     <br>
     <button type="button" onclick="loadMainPage()">Click Me!</button>

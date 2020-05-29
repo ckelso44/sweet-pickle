@@ -1,26 +1,14 @@
 from flask import Flask, request, jsonify
 from flask_restful import Resource, Api
-from flask_cors import CORS
 from sqlalchemy import create_engine
-from json import dumps
 from datetime import datetime
 
-try:
-    print("Connecting to database")
-    db_connect = create_engine('sqlite:///c:\\Projects\\SweetPickle\\DATA\\main.db')
-    #db_connect = create_engine('sqlite:///c:\\Web Page\\JobReporting\\data\\reporting_test.db')
-except:
-    print("Failed to connect to database")
+db_connect = create_engine('sqlite:///c:\\Projects\\SweetPickle\\DATA\\main.db')
 
-print(db_connect.table_names())
-
-app = Flask(__name__)
-CORS(app)
-api = Api(app)
 
 # PURPOSE - provide a resource for managing restaurant profiles
 class Employee(Resource):
-    
+
     # PURPOSE - provide a method to retrieve employee information
     #  ARGS - <none>: returns all restaurants 
     #   ResID: returns single record based on resID 
@@ -107,7 +95,7 @@ class Employee(Resource):
 
 # PURPOSE - provide a resource for managing restaurant profiles
 class Restaurant(Resource):
-    
+
     # PURPOSE - provide a method to retrieve user information
     #  ARGS - <none>: returns all restaurants 
     #   ResID: returns single record based on resID 
@@ -246,6 +234,14 @@ class Restaurant(Resource):
 
 # PURPOSE - provide a resource for managing users
 class User(Resource):
+
+    try:
+        print("Connecting to database")
+        db_connect = create_engine('sqlite:///c:\\Projects\\SweetPickle\\DATA\\main.db')
+        #db_connect = create_engine('sqlite:///c:\\Web Page\\JobReporting\\data\\reporting_test.db')
+    except:
+        print("Failed to connect to database")
+
     #  ARGS - <none>: returns all users, UserID: returns single user
     #  Returns - UserID, Name, Email, CreateDate, LastLogin
     def get(self):
@@ -355,15 +351,28 @@ class User(Resource):
         conn.close
         return jsonify("Method Not Supported")
 
+# PURPOSE - provide a resource for logging in users
 class Login(Resource):
-    
+
+    try:
+        print("Connecting to database")
+        db_connect = create_engine('sqlite:///c:\\Projects\\SweetPickle\\DATA\\main.db')
+        #db_connect = create_engine('sqlite:///c:\\Web Page\\JobReporting\\data\\reporting_test.db')
+    except:
+        print("Failed to connect to database")
+
+    #  ARGS - <none>: Email, Password to verify user
+    #  Processes - upon successful validation, sets last login to now
+    #  Returns - UserID, PrefName
     def patch(self):
-        print("Post Users Requested")
+        print("Post Login Requested")
         aJSON = request.get_json(force=True)
 
-        # ++ validate email is unique
+        password = aJSON["password"] # <-- add decryption to this
+
+        # ++ validate email and password combination
         conn = db_connect.connect()
-        getResult = conn.execute('SELECT UserID, Name from Users WHERE Email = ? AND Password = ?', (aJSON["email"], aJSON["uPassword"])) # Search for other users with this email
+        getResult = conn.execute('SELECT UserID, PrefName from Users WHERE Active = 1 AND Email = ? AND Password = ?', (aJSON["email"], password)) # Search for other users with this email
         row = getResult.fetchone()
         print(row)
         conn.close
@@ -382,15 +391,7 @@ class Login(Resource):
             aValues = (lastLogin, row[0])
             conn.execute(sql, aValues) 
             conn.close
-            result = {"UserID" : row[0], "Name": row[1]}
+            result = {"UserID" : row[0], "PrefName": row[1]}
             #Send back the users details for use with the application
             #result = {'Users': [dict(zip(tuple (query.keys()) ,i)) for i in query.cursor]}
             return jsonify(result)
-
-api.add_resource(User, '/user', methods=['GET','POST','PATCH']) # Route_1
-api.add_resource(Restaurant, '/restaurant', methods=['GET','POST'])
-api.add_resource(Employee, '/employee', methods=['GET', 'POST'])
-api.add_resource(Login, '/login', methods=['PATCH']) # Route_2
-
-if __name__ == '__main__':
-     app.run(port='5003')

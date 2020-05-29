@@ -1,7 +1,7 @@
 // function myFunction - for use with Top Navigation bar
 // Referece: https://www.w3schools.com/howto/tryit.asp?filename=tryhow_js_topnav
 
-function myFunction() {
+function topNav() {
     var x = document.getElementById("myTopnav");
     if (x.className === "topnav") {
         x.className += " responsive";
@@ -9,6 +9,7 @@ function myFunction() {
         x.className = "topnav";
     }
 }
+
 // function CurrencyFormatted - converts a number value to a 2 decimal currency 
 // Reference: https://css-tricks.com/snippets/javascript/format-currency/
 function CurrencyFormatted(amount) {
@@ -24,4 +25,20 @@ function CurrencyFormatted(amount) {
     if (s.indexOf('.') == (s.length - 2)) { s += '0'; }
     s = minus + s;
     return s;
+}
+
+// Check if the employee already exists in the system
+// Triggers -   Body onload of main.html
+// Inputs -     <None> 
+// Outputs -    <None>
+function mainOnLoad() {
+    var JSONProfile = getCookie("spProfile")
+    objProfile = JSON.parse(JSONProfile)
+    userID = objProfile.UserID
+    console.log(userID)
+
+    if (userID == "") {
+        location.replace("login.html")
+    }
+    document.getElementById("profileName").innerHTML = "Welcome " + objProfile.PrefName
 }
