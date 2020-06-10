@@ -29,12 +29,15 @@ function getCookie(cname) {
     return "";
 }
 
-
 function getUserID() {
     userID = getCookie("activeUserID");
     return Number(userID);
 }
 
+function getResID() {
+    resID = getCookie("RestaurantID");
+    return Number(resID);
+}
 /**
  * Get the URL parameters
  * source: https://css-tricks.com/snippets/javascript/get-url-variables/
@@ -54,3 +57,18 @@ var getParams = function(url) {
     // console.log(params);
     return params;
 };
+
+/**
+ * Return a date in the format compatible to the database
+ * @param  <none>
+ * @return {string}     The date in a YYYY-MM-DD format
+ */
+var nowDateUTC = function() {
+    var date = new Date();
+    var month = date.getUTCMonth()
+    if (month < 10) { month = "0" + month }
+    var day = date.getUTCDay()
+    if (day < 10) { day = "0" + day }
+    var dateFormat = date.getUTCFullYear() + '-' + month + '-' + day
+    return (dateFormat);
+}

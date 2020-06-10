@@ -37,6 +37,28 @@ function getEmployeeRecord(UserID, Name) {
             // IF more than one profile, force them to select one
             document.getElementById("message").innerHTML = "Please choose which resturant to login to..."
 
+            // Show the restaurants as a button then can select
+            for (var i = 0; i < empData.length; i++) {
+                var restaurant = empData[i];
+                resID = restaurant["RestaurantID"]
+
+                // create the wrapper Div and add it to the document
+                var resDivID = "resDiv" + i
+                var resDiv = document.createElement("DIV"); // Create a div element
+                resDiv.className = "resChoiceDiv"
+                resDiv.id = resDivID
+                document.getElementById("message").appendChild(resDiv);
+
+                // convert the div into a button displaying the Restaurant name
+                var buttonID = "resButton" + i
+                var resButton = document.createElement("BUTTON");
+                resButton.className = "resButton";
+                resButton.id = buttonID;
+                resButton.innerHTML = resID;
+                resButton.setAttribute('onclick', 'resLogin(' + resID + ')');
+                document.getElementById(resDivID).appendChild(resButton);
+            }
+
         } else if (empData.length == 1) {
             // IF only one, log them through directly after updating the cookie with the profile
             resID = empData[0].RestaurantID;

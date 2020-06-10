@@ -35,7 +35,8 @@ function mainOnLoad() {
     var JSONProfile = getCookie("spProfile")
     objProfile = JSON.parse(JSONProfile)
     userID = objProfile.UserID
-    console.log(userID)
+    resID = objProfile.RestaurantID
+    console.log(userID + ", " + resID)
 
     if (userID == "") {
         location.replace("login.html")

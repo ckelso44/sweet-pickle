@@ -228,7 +228,7 @@ function confirmRes(resProfile) {
         provisionEmployee();
     }
 
-    // When the user clicks on the cancel button, set the userID and close the modal
+    // When the user clicks on the cancel button close the modal
     cancelBtn.onclick = function() {
         modal.style.display = "none";
     }
