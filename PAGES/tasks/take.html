@@ -4,96 +4,148 @@
 
 <head>
     <title>Sweet Pickle - Facts Page</title>
-    <link rel="stylesheet" href="../../CSS/main.css">
-    <link rel="stylesheet" href="../../CSS/tasks.css">
-    <!--
-    
-		<img src= "images/myImage.jpg">
-		-->
+    <link rel="stylesheet" href="../../CSS/default.css">
+    <link rel="stylesheet" href="../../CSS/take.css">
+
     <script src="../../JS/toolkit.js"></script>
-    <script src="../../JS/main.js"></script>
-    <script src="../../JS/tasks.js"></script>
-
-
-
+    <script src="../../JS/take.js"></script>
 </head>
 
 <body onload="onLoadTask()">
-    <div id="navPageDiv">
-        <a href="take.html" class="navPageItem">&#171</a>
-        <span class="navPageItem" id="dayOfWeek">Day of Week</span>
-        <a href="take.html" class="navPageItem">&#187</a>
-        <br>
-        <span class="navPageItem">+/- Budget: </span>
-        <span class="navPageItem" id="sumBudget">Tasks Outstanding</span>
-    </div>
-    <div class="stdDiv" id="dailyTakeSummary">
-        <table class="sumTable">
-        </table>
+    <!-- The sidebar -->
+    <div class="sidebar">
+        <p id="resName">Restaurant Name</p>
+        <hr>
+        <a href="../../main.html">Home</a>
+        <a class="active" href="takeHome.html">Takes</a>
+        <a href="PAGES/admin/status.html">Admin</a>
+        <hr>
+        <a id="profile" href="../../PAGES/profiles/profile.html">Name</a>
     </div>
 
-    <!-- Additional Details section for total take sheets-->
-    <div class="stdDiv" id="detailsDiv">
-        <input type="text" id="dtID" hidden>
-        <div class="leftDetail">
-            <span>GST: </span>
-            <span class="detailTotal" id="GST">0</span>
+    <!-- The breadcrumb menu -->
+
+    <ul class="breadcrumb">
+        <li><a href="takeHome.html">Take Summary</a></li>
+        <li>Daily Take Sheet</li>
+    </ul>
+    <!-- Content -->
+
+    <div class="content">
+        <div id="navPageDiv">
+            <span class="navPageItem"><button type="button" class="navButton" onclick="prevDay()">&#171</button>
+            </span>
+            <span class="navPageItem" id="dtDate">Day of Week</span>
+            <span class="navPageItem"> <button type="button" class="navButton" onclick="nextDay()">&#187</button>
+            </span>
+            <br>
+            <span class="navPageItem" id="pageTitle">Tasks Outstanding</span>
         </div>
-        <div class="leftDetail">
-            <span>PST: </span>
-            <span class="detailTotal" id="PST">0</span>
+        <div id="mainTakeDiv">
+            <div class="stdDiv" id="dailyTakeSummary">
+                <table class="sumTable">
+                </table>
+            </div>
+
+            <!-- Additional Details section for total take sheets-->
+            <div class="stdDiv" id="detailsDiv">
+                <input type="text" id="dtID" hidden>
+                <div class="leftDetail">
+                    <span>GST: </span>
+                    <span class="detailTotal" id="GST">0</span>
+                </div>
+                <div class="leftDetail">
+                    <span>PST: </span>
+                    <span class="detailTotal" id="PST">0</span>
+                </div>
+                <div class="rightDetail">
+                    <span>Net Total: </span>
+                    <span class="detailTotal" id="netTotal">0</span>
+                </div>
+                <br>
+                <div class="rightDetail">
+                    <span>Budget: </span>
+                    <span class="detailTotal" id="budget">0</span>
+                </div>
+                <br>
+                <button class="stdButton" onclick="editDailyTake()">Edit Task</button>
+            </div>
+
+            <!-- Insert a Progress bar above the individual Take Sheets -->
+            <div class="stdDiv" id="progressDiv">
+                <h2>Today's Take Sheets</h2>
+                <label for="takeProgress">Take Sheets Completed: </label>
+                <progress id="takeProgress" value="0" max="0"> 100% </progress>
+                <table id="progressTable">
+                </table>
+            </div>
+
+            <!-- Used to insert the dynamically created list of staff takes -->
+            <div id="takeSheetSpan"></div>
+
+            <div class="stdDiv">
+                <button class="stdButton" onclick="newStaffTake()">Add a Staff Take</button>
+            </div>
         </div>
-        <div class="leftDetail">
-            <span>Net Total: </span>
-            <span class="detailTotal" id="netTotal">0</span>
+    </div>
+    <!--   ----------------- Modal Windows-----------------------------  -->
+    <div id="editTakeModal" class="modal">
+        <!-- Modal content -->
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="mHeader">Modal Header</h2>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <fieldset>
+                        <label>GST: <input type='number' id = 'GSTEdit' required=true></label><br>
+                        <label>PST: <input type='number' id = 'PSTEdit' required=true></label><br>
+                        <br>
+                        <label>Budget: <input type='number' id = 'budgetEdit' required=true></label>
+                    </fieldset>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <span class="mButton" id="mButtonConfirm">Confirm</span>
+                <span class="mButtonCancel" id="mButtonCancel">Cancel</span>
+            </div>
         </div>
-        <br>
-        <div class="rightDetail">
-            <span>Budget: </span>
-            <span class="detailTotal" id="budget">0</span>
-        </div>
-        <br>
-        <button class="stdButton" onclick="editDailyTake()">Edit Task</button>
     </div>
 
-    <!-- Insert a Progress bar above the individual Take Sheets -->
-    <div class="stdDiv" id="progressDiv">
-        <h2>Today's Take Sheets</h2>
-        <label for="takeProgress">Take Sheets Completed: </label>
-        <progress id="takeProgress" value="0" max="0"> 100% </progress>
-        <table id="progressTable">
-        </table>
+    <div id="newTakeModal" class="modal">
+        <!-- Modal content -->
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="mHeader" id="ntHeader">Modal Header</h2>
+            </div>
+            <div class="modal-body">
+                <span id="newTaskMsg">There is no daily task defined for this day, what would you like to do?</span>
+            </div>
+            <div class="modal-footer">
+                <div class="mButton" id="mNewTaskBasic">Create a Basic Task</div>
+                <div class="mButton" id="mNewTaskCopy">Copy from an existing Task</div>
+                <div class="mButtonCancel" id="mNewTaskCancel">Cancel and return</div>
+            </div>
+        </div>
     </div>
 
-
-    <!-- Used to insert the dynamically created list of staff takes -->
-    <span id="takeSheetSpan"></span>
+    <div id="createTakeModal" class="modal">
+        <!-- Modal content -->
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="mHeader">Set Budget</h2>
+            </div>
+            <div class="modal-body">
+                <span id="newTaskMsg">To create a new Daily Take, please set a budget</span><br>
+                <label>Budget: <input type='number' id = 'budgetNew'></label>
+            </div>
+            <div class="modal-footer">
+                <div class="mButton" id="CreateTaskBtn">Create a Basic Task</div>
+                <div class="mButtonCancel" id="CancelTaskBtn">Cancel</div>
+            </div>
+        </div>
+    </div>
 
 </body>
-
-<div id="myModal" class="modal">
-
-    <!-- Modal content -->
-    <div class="modal-content">
-        <div class="modal-header">
-            <h2 id="mHeader">Modal Header</h2>
-        </div>
-        <div class="modal-body">
-            <form>
-                <fieldset>
-                    <label>GST: <input type='number' id = 'GSTEdit' required=true></label><br>
-                    <label>PST: <input type='number' id = 'PSTEdit' required=true></label><br>
-                    <br>
-                    <label>Budget: <input type='number' id = 'budgetEdit' required=true></label>
-                </fieldset>
-            </form>
-        </div>
-        <div class="modal-footer">
-            <span class="mButton" id="mButtonConfirm">Confirm</span>
-            <span class="mButton" id="mButtonCancel">Cancel</span>
-        </div>
-    </div>
-
-</div>
 
 </html>

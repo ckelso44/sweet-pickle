@@ -78,13 +78,12 @@ class System(Resource):
                 resID = reqDict["resID"]
                 databaseConnection = dbConfig["dbFilePath"] + resID + '.db'
                 db = create_engine(databaseConnection)
-                conn = db.connect() 
                 aJSON = request.get_json(force=True)
 
                 nowDate = datetime.now()
 
                 #create the system setting
-                conn = db_connect.connect()
+                conn = db.connect()
                 postQuery = '''INSERT INTO System (
                         Key,
                         Value,

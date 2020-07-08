@@ -1,0 +1,87 @@
+<!doctype html>
+
+<html>
+
+<head>
+    <title>Sweet Pickle - Staff Take</title>
+    <link rel="stylesheet" href="../../CSS/default.css">
+    <link rel="stylesheet" href="../../CSS/take.css">
+
+    <!-- <img src= "images/myImage.jpg"> -->
+
+    <script src="../../JS/toolkit.js"></script>
+    <script src="../../JS/stafftake.js"></script>
+
+
+
+</head>
+
+<body onload="stOnLoad()">
+    <div class="stdDiv">
+        <form>
+            <fieldset>
+                <!-- hidden section for ID's-->
+                <div class="hiddenIDs">
+                    <label>DailyTake ID:
+                        <input type="number" id="dtID">
+                    </label>
+                    <label>StaffTake ID:
+                        <input type="number" id="stID">
+                    </label>
+                </div>
+                <h2>Staff Take</h2>
+
+                <label for="staff">Staff Member:</label>
+                <div class="selectList">
+                    <select id="staff" name="staff"></select>
+                </div>
+
+                <label for="shift">Shift:</label>
+                <div class="selectList">
+                    <select id="shift" name="shift" onchange="viewOther()"></select>
+                </div>
+                <div id="otherShift" hidden>
+                    <label id="otherLabel">Other Shift:
+                        <input type="text" id="other">
+                    </label>
+                </div>
+                <label>Status:
+                    <input type="text" id = "status" readonly>
+                </label>
+            </fieldset>
+            <button type="button" id="btnApply" class="formButton" onclick="applyStaffTake()">Apply</button>
+            <button type="button" id="btnSave" class="formButton" onclick="saveStaffTake()">Save</button>
+            <button type="button" id="btnCancel" class="formButton" onclick="returnDailyTake()">Cancel</button>
+            <button type="button" id="btnDelete" class="formButton" hidden>Delete</button>
+        </form>
+    </div>
+    <div class="stdDiv" id="takesheets"></div>
+</body>
+
+<div id="myModal" class="modal">
+
+    <!-- Modal content -->
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2 id="mHeader">Modal Header</h2>
+        </div>
+        <div class="modal-body">
+            <form>
+                <fieldset>
+                    <input type='text' id='tID' hidden>
+                    <label>Expected: <input type='number' id = 'expected' onchange="calcTake()"></label><br>
+                    <label>Actual: <input type='number' id = 'actual' onchange="calcTake()"></label><br>
+                    <br>
+                    <label>Difference: <input type='number' id = 'difference' disabled></label><br>
+                    <label>Complete: <input type='checkbox' id = 'pStatus' disabled></label>
+                </fieldset>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <span class="mButton" id="mButtonConfirm">Confirm</span>
+            <span class="mButton" id="mButtonCancel">Cancel</span>
+        </div>
+    </div>
+</div>
+
+</html>

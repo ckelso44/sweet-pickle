@@ -7,9 +7,9 @@ from datetime import datetime
 #local files
 from config import comSettings
 from admin import User, Restaurant, Employee, Login
-from take import DailyTake, StaffTake, Take
+from take import DailyTake, StaffTake, Take, DailyTakeByDate
 from system import System
-
+from employee import Employees, ActiveEmployees
 
 app = Flask(__name__)
 CORS(app)
@@ -23,7 +23,8 @@ class Ping(Resource):
 
     def get(self):
         print("Ping requested")
-        reqDict = request.args 
+        reqDict = request.args
+        dbConfig = comSettings()  
         
         if "resID" in reqDict:
             resID = reqDict["resID"]
@@ -41,6 +42,7 @@ class Ping(Resource):
             print("Connecting to main database")
             dbConfig = comSettings() 
             db_main = create_engine(dbConfig["dbFilePath"] + 'main.db')
+            conn = db_main.connect()
             tblNames = db_main.table_names()
             conn.close
             return jsonify(tblNames)
@@ -50,10 +52,13 @@ api.add_resource(Ping, '/ping', methods=['GET'])
 api.add_resource(User, '/user', methods=['GET','POST','PATCH'])
 api.add_resource(Restaurant, '/restaurant', methods=['GET','POST'])
 api.add_resource(Employee, '/employee', methods=['GET', 'POST'])
+api.add_resource(Employees, '/employees', methods=['GET', 'POST'])
+api.add_resource(ActiveEmployees, '/employees/active', methods=['GET'])
 api.add_resource(Login, '/login', methods=['PATCH'])
-api.add_resource(DailyTake, '/dailytake', methods=['GET', 'PATCH'])
-api.add_resource(StaffTake, '/dailytake/stafftake', methods=['GET'])
-api.add_resource(Take, '/dailytake/stafftake/take', methods=['GET'])
+api.add_resource(DailyTake, '/dailytake', methods=['GET', 'PATCH', 'POST'])
+api.add_resource(StaffTake, '/dailytake/stafftake', methods=['GET', 'POST', 'PATCH'])
+api.add_resource(Take, '/dailytake/stafftake/take', methods=['GET', 'PATCH'])
+api.add_resource(DailyTakeByDate, '/dailytake/bydate', methods=['GET'])
 api.add_resource(System, '/system', methods=['GET', 'POST'])
 
 if __name__ == '__main__':

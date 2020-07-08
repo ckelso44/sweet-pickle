@@ -29,14 +29,33 @@ function getCookie(cname) {
     return "";
 }
 
-function getUserID() {
-    userID = getCookie("activeUserID");
-    return Number(userID);
+// function CurrencyFormatted - converts a number value to a 2 decimal currency 
+// Reference: https://css-tricks.com/snippets/javascript/format-currency/
+function CurrencyFormatted(amount) {
+    var i = parseFloat(amount);
+    if (isNaN(i)) { i = 0.00; }
+    var minus = '';
+    if (i < 0) { minus = '-'; }
+    i = Math.abs(i);
+    i = parseInt((i + .005) * 100);
+    i = i / 100;
+    s = new String(i);
+    if (s.indexOf('.') < 0) { s += '.00'; }
+    if (s.indexOf('.') == (s.length - 2)) { s += '0'; }
+    s = minus + s;
+    return s;
 }
 
+// returns the user ID stored in the profile cookie
+function getUserID() {
+    profile = JSON.parse(getCookie("spProfile"));
+    return Number(profile.userID);
+}
+
+//returns the restaurant ID stored in the profile cookie
 function getResID() {
-    resID = getCookie("RestaurantID");
-    return Number(resID);
+    profile = JSON.parse(getCookie("spProfile"));
+    return Number(profile.RestaurantID);
 }
 /**
  * Get the URL parameters
@@ -63,12 +82,54 @@ var getParams = function(url) {
  * @param  <none>
  * @return {string}     The date in a YYYY-MM-DD format
  */
+
 var nowDateUTC = function() {
-    var date = new Date();
-    var month = date.getUTCMonth()
+    var d = new Date();
+    var month = d.getMonth() + 1
     if (month < 10) { month = "0" + month }
-    var day = date.getUTCDay()
+    var day = d.getDate()
     if (day < 10) { day = "0" + day }
-    var dateFormat = date.getUTCFullYear() + '-' + month + '-' + day
+    var dateFormat = d.getFullYear() + '-' + month + '-' + day
     return (dateFormat);
+}
+
+
+/**
+ * Return a date offset by days compared to today's date 
+ * @param   date        The date to compare in a YYYY-MM-DD format
+ * @param   offset      The # of days to add or subtract from the date (+/-)
+ * @return {date}       The date offset in a YYYY-MM-DD format    
+ */
+function dayChange(date, offset) {
+    var d = new Date()
+    year = date.substring(0, 4)
+    month = date.substring(5, 7)
+    day = date.substring(8, 10)
+    d.setFullYear(year, month, day)
+    d.setDate(d.getDate() + offset);
+    var month = d.getMonth()
+    if (month < 10) { month = "0" + month }
+    var day = d.getDate()
+    if (day < 10) { day = "0" + day }
+    var dateFormat = d.getFullYear() + '-' + month + '-' + day
+    return (dateFormat)
+}
+
+/**
+ * Validate User
+ */
+function validateUser() {
+    if (getUserID() == "") {
+        location.replace("login.html")
+    }
+}
+
+function setMenu() {
+
+    validateUser()
+    var JSONProfile = getCookie("spProfile")
+    objProfile = JSON.parse(JSONProfile)
+
+    document.getElementById("resName").innerHTML = objProfile.RestaurantName
+    document.getElementById("profile").innerHTML = "Profile: " + objProfile.PrefName
 }

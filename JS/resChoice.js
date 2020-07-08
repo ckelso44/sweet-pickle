@@ -4,11 +4,12 @@
 // Triggers -   from OnLoad
 // Inputs -     UserID: used to look up employee info 
 // Outputs -    <None>
-function resLogin(resID) {
-    //update the cookie with the restaurant ID
+function resLogin(resID, resName) {
+    //update the cookie with the restaurant ID & Name
     var JSONProfile = getCookie("spProfile");
     objProfile = JSON.parse(JSONProfile);
     objProfile.RestaurantID = resID;
+    objProfile.RestaurantName = resName;
     setCookie("spProfile", JSON.stringify(objProfile), 100)
 
     //send them through to the main website
@@ -41,6 +42,7 @@ function getEmployeeRecord(UserID, Name) {
             for (var i = 0; i < empData.length; i++) {
                 var restaurant = empData[i];
                 resID = restaurant["RestaurantID"]
+                resName = restaurant['Name']
 
                 // create the wrapper Div and add it to the document
                 var resDivID = "resDiv" + i
@@ -54,16 +56,18 @@ function getEmployeeRecord(UserID, Name) {
                 var resButton = document.createElement("BUTTON");
                 resButton.className = "resButton";
                 resButton.id = buttonID;
-                resButton.innerHTML = resID;
-                resButton.setAttribute('onclick', 'resLogin(' + resID + ')');
+                resButton.innerHTML = resName;
+
+                resButton.setAttribute('onclick', 'resLogin(' + resID + ', ' + resName + ')');
                 document.getElementById(resDivID).appendChild(resButton);
             }
 
         } else if (empData.length == 1) {
             // IF only one, log them through directly after updating the cookie with the profile
             resID = empData[0].RestaurantID;
+            resName = empData[0].Name;
             document.getElementById("message").innerHTML = "We found a restaurant! We're going to log you into Restaurant ID: " + resID;
-            resLogin(resID);
+            resLogin(resID, resName);
         } else {
             // IF no profile or error, message the user to go back to their admin, offer to return them back to the login
             document.getElementById("message").innerHTML = "Sorry but we couldn't find a record for you. Please go back to the login and try again with a different user or contact your restuarant administrator."

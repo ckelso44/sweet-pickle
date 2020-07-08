@@ -1,0 +1,52 @@
+/* 7-Day Cards 
+https://www.w3schools.com/howto/howto_css_cards.asp */
+
+#weekView,
+#weekView_sample {
+    display: flex;
+}
+
+.card {
+    /* Add shadows to create the "card" effect */
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    transition: 0.3s;
+    width: 12%;
+    flex: 1;
+    margin: 2px;
+}
+
+.card_complete {
+    background-color: var(--Colour-4);
+}
+
+.card_incomplete {
+    background-color: var(--Alert);
+}
+
+.card_ready {
+    background-color: var(--Ready);
+}
+
+.card_undefined {
+    background-color: var(--Undefined);
+}
+
+
+/* On mouse-over, add a deeper shadow */
+
+.card:hover {
+    box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
+    background-color: var(--Highlight);
+}
+
+
+/* Add some padding inside the card container */
+
+.container {
+    padding: 2px 16px;
+}
+
+p {
+    color: var(--Colour-0);
+    font-size: 12px;
+}

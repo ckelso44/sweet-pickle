@@ -6,6 +6,8 @@ from sqlalchemy import create_engine
 from datetime import datetime
 # local files
 from config import comSettings
+import re # used to split the array returned from the database
+
 
 # PURPOSE - create a resource for retrieving the daily take sheet
 class DailyTake(Resource):
@@ -71,7 +73,7 @@ class DailyTake(Resource):
                 tResult = {'Take': [dict(zip(tuple (tQuery.keys()) ,j)) for j in tQuery]}
                 # print(tResult["Take"])
                 # now get all the Staff Takes
-                stRequest = "SELECT * FROM StaffTake WHERE DailyTakeID = ?"
+                stRequest = "SELECT * FROM stafftakeview WHERE DailyTakeID = ?"
                 stQuery = conn.execute(stRequest, dtID)
                 stResult = {'StaffTake': [dict(zip(tuple (stQuery.keys()) ,k)) for k in stQuery]}
                 # print(stResult["StaffTake"])
@@ -118,7 +120,7 @@ class DailyTake(Resource):
                         sumsDict[payment] = newPayDict
 
                     else: 
-                        diff = take["Expected"] - take["Actual"] 
+                        diff = takeExp - takeAct 
                         payDict = {"ExpSum": takeExp, "ActSum": takeAct, "DiffSum": diff, "Count": 1}
                         sumsDict[payment] = payDict
                 
@@ -189,50 +191,341 @@ class DailyTake(Resource):
                     nowDate,
                     aJSON["UserID"], 
                     aJSON["DailyTakeID"]) 
-                postResult = conn.execute(patchQuery, patchValues)
+                conn.execute(patchQuery, patchValues)
                 conn.close
                 #empID = postResult.lastrowid
                 #print(empID)
                 return jsonify("Success")
+
+    def post(self):
+            print("Daily Take Post Requested")
+            reqDict = dict(request.args)
+            dbConfig = comSettings() 
+        
+            if "resID" not in reqDict:
+                return jsonify("Database not specified")
+            else:
+                resID = reqDict["resID"]
+                databaseConnection = dbConfig["dbFilePath"] + resID + '.db'
+                db = create_engine(databaseConnection)
+                aJSON = request.get_json(force=True)
+                print(aJSON)
+                nowDate = datetime.now()
+
+                #create the daily take 
+                conn = db.connect()
+                postQuery = '''INSERT INTO DailyTake (
+                        Date,
+                        Budget,
+                        CreateDate,
+                        CreateUser,
+                        ModDate,
+                        ModUser
+                    ) VALUES (?,?,?,?,?,?)'''
+                postValues = (aJSON["Date"], 
+                    aJSON["Budget"],
+                    nowDate, 
+                    aJSON["UserID"], 
+                    nowDate, 
+                    aJSON["UserID"]) 
+                postResult = conn.execute(postQuery, postValues)
+                dtID = postResult.lastrowid
+                return jsonify(dtID)
 
 
 class StaffTake(Resource):
 
     def get(self):
         print("StaffTake Requested")
-        reqDict = request.args 
+        reqDict = dict(request.args) 
+        dbConfig = comSettings() 
+        # print(reqDict)
         
-        if "resID" in request.args:
-            resID = request.args["resID"]
-            databaseConnection = 'sqlite:///c:\\Projects\\SweetPickle\\DATA\\' + resID + '.db'
+        if "resID" in reqDict:
+            resID = reqDict["resID"]
+            databaseConnection = dbConfig["dbFilePath"] + resID + '.db'
             db = create_engine(databaseConnection)
             conn = db.connect() 
-            query = conn.execute("SELECT * FROM StaffTake")
-            result = {'StaffTake': [dict(zip(tuple (query.keys()) ,i)) for i in query.cursor]}
-            conn.close
-            return jsonify(result)
-        else:
-            return jsonify("invalid request - no resid found")
 
-class Take(Resource):
+            # Set the basic response query
+            sqlReq = 'SELECT * FROM StaffTakeView'
 
-    def get(self):
-        print("Take Requested")
-        reqDict = request.args 
-        
-        if "resID" in request.args:
-            resID = request.args["resID"]
-            databaseConnection = 'sqlite:///c:\\Projects\\SweetPickle\\DATA\\' + resID + '.db'
-            db = create_engine(databaseConnection)
-            conn = db.connect() 
-            query = conn.execute("SELECT * FROM Take")
-            result = {'Take': [dict(zip(tuple (query.keys()) ,i)) for i in query.cursor]}
+            # remove resID from parameters
+            del reqDict["resID"]
+
+            # If there are no arguments, set a basic request for all records
+            if len(reqDict) == 0 :
+                fullReq = '' + sqlReq + ''
+                query = conn.execute(fullReq)
+            # If there is one or more arguments, filter the request
+            else:
+                count = 1
+                parReq = ""
+                values = []
+                # loop through the arguments to build the Where clause
+                for field, value in reqDict.items():
+                    if count == 1 :
+                        parReq = ' WHERE ' + field + ' = ?'
+                    else:
+                        parReq = parReq + ' AND ' + field + ' = ?'
+                    
+                    # add the parameter value for the second part of the request
+                    values.append(value)
+                    count = count + 1
+                # build the full query and send the request    
+                fullReq = '' + sqlReq + parReq + ''
+                # print(fullReq, values)
+                query = conn.execute(fullReq, values) # This line performs query and returns json result
+
+            #result = {'StaffTake': [dict(zip(tuple (query.keys()) ,i)) for i in query.cursor]}
+            # Loop through the DailyTake results to start building the additional fields
+            
+            staffTakes = list()
+            query.keys().append("Status") # calculated field
+            query.keys().append("Takes")
+
+            #Loop through the each daily take
+            for i in query.cursor:
+                Li=list(i)
+                # find the ID for the DailyTake
+                stID = Li[query.keys().index("StaffTakeID")] 
+                #get all the takes that make up the DailyTake sheet
+                tRequest = "SELECT * FROM Take WHERE StaffTakeID = ?"
+                tQuery = conn.execute(tRequest, stID)
+                tResult = {'Take': [dict(zip(tuple (tQuery.keys()) ,j)) for j in tQuery]}
+                # figure out the status for the staff take
+                stStatus = 0
+                for take in tResult["Take"]:
+                    # print(sTake)
+                    if take["Status"] != 0 :
+                        stStatus = 1
+
+                Li.append(stStatus)
+                Li.append(tResult["Take"])
+                i=tuple(Li)
+                staffTakes.append(i)
+                # print(stResult)
+
+            result = {'StaffTake': [dict(zip(tuple (query.keys()) ,i)) for i in staffTakes]}
+
             conn.close
             return jsonify(result)
         else:
             return jsonify("invalid request - no resid found")
     
-        #conn = db_connect.connect() # connect to database
+    def patch(self):
+            print("Staff Take Patch Requested")
+            reqDict = dict(request.args)
+            dbConfig = comSettings() 
+        
+            if "resID" not in reqDict:
+                return jsonify("Database not specified")
+            else:
+                resID = reqDict["resID"]
+                databaseConnection = dbConfig["dbFilePath"] + resID + '.db'
+                db = create_engine(databaseConnection)
+                conn = db.connect() 
+                aJSON = request.get_json(force=True)
+
+                nowDate = datetime.now()
+
+                # send the update for the daily take
+                patchQuery = '''UPDATE StaffTake
+                    SET DailyTakeID = ?,
+                        EmployeeID = ?, 
+                        Shift = ?,
+                        ModDate = ?,
+                        ModUser = ?
+                    WHERE StaffTakeID = ?'''
+                patchValues = (aJSON["DailyTakeID"], 
+                    aJSON["EmployeeID"], 
+                    aJSON["Shift"], 
+                    nowDate,
+                    aJSON["UserID"], 
+                    aJSON["StaffTakeID"]) 
+                conn.execute(patchQuery, patchValues)
+                conn.close
+                return jsonify("Success")
+
+    def post(self):
+            print("Staff Take Post Requested")
+            reqDict = dict(request.args)
+            dbConfig = comSettings() 
+        
+            if "resID" not in reqDict:
+                return jsonify("Database not specified")
+            else:
+                resID = reqDict["resID"]
+                databaseConnection = dbConfig["dbFilePath"] + resID + '.db'
+                db = create_engine(databaseConnection)
+                aJSON = request.get_json(force=True)
+
+                nowDate = datetime.now()
+
+                #create the system setting
+                conn = db.connect()
+                postQuery = '''INSERT INTO StaffTake (
+                        DailyTakeID,
+                        EmployeeID,
+                        Shift,
+                        CreateDate,
+                        CreateUser,
+                        ModDate,
+                        ModUser
+                    ) VALUES (?,?,?,?,?,?,?)'''
+                postValues = (aJSON["DailyTakeID"], 
+                    aJSON["EmployeeID"],
+                    aJSON["Shift"], 
+                    nowDate, 
+                    aJSON["UserID"], 
+                    nowDate, 
+                    aJSON["UserID"]) 
+                postResult = conn.execute(postQuery, postValues)
+                stID = postResult.lastrowid
+                # get the list of Payments from the system  
+                postResult = conn.execute("SELECT Value FROM System WHERE Key = ?", "Payments")
+                # result = {'System': [dict(zip(tuple (postResult.keys()) ,i)) for i in postResult.cursor]}
+                result = postResult.fetchone()
+                payments = re.sub("[^\w]", " ",  result[0]).split() #convert to a list
+                for i in payments:
+                    postQuery = '''INSERT INTO Take (
+                        StaffTakeID,
+                        DailyTakeID,
+                        Payment,
+                        CreateDate,
+                        CreateUser,
+                        ModDate,
+                        ModUser
+                    ) VALUES (?,?,?,?,?,?,?)'''
+                    postValues = (
+                        stID, 
+                        aJSON["DailyTakeID"], 
+                        i,
+                        nowDate, 
+                        aJSON["UserID"], 
+                        nowDate, 
+                        aJSON["UserID"]) 
+                    conn.execute(postQuery, postValues)
+                conn.close
+                return jsonify(stID)
+
+
+class Take(Resource):
+
+    def get(self):
+        print("Take Requested")
+        reqDict = dict(request.args)
+        dbConfig = comSettings() 
+        
+        if "resID" in reqDict:
+            resID = reqDict["resID"]
+            databaseConnection = dbConfig["dbFilePath"] + resID + '.db'
+            db = create_engine(databaseConnection)
+            conn = db.connect() 
+
+            # Set the basic response query
+            sqlReq = 'SELECT * FROM Take'
+
+            # remove resID from parameters
+            del reqDict["resID"]
+
+            # If there are no arguments, set a basic request for all records
+            if len(reqDict) == 0 :
+                fullReq = '' + sqlReq + ''
+                query = conn.execute(fullReq)
+            # If there is one or more arguments, filter the request
+            else:
+                count = 1
+                parReq = ""
+                values = []
+                # loop through the arguments to build the Where clause
+                for field, value in reqDict.items():
+                    if count == 1 :
+                        parReq = ' WHERE ' + field + ' = ?'
+                    else:
+                        parReq = parReq + ' AND ' + field + ' = ?'
+                    
+                    # add the parameter value for the second part of the request
+                    values.append(value)
+                    count = count + 1
+                # build the full query and send the request    
+                fullReq = '' + sqlReq + parReq + ''
+                query = conn.execute(fullReq, values) # This line performs query and returns json result
+            
+            conn.close
+            result = {'Take': [dict(zip(tuple (query.keys()) ,i)) for i in query.cursor]}
+            return jsonify(result)
+
+        else:
+            return jsonify("invalid request - no resid found")
+        
+    def patch(self):
+            print("Take Patch Requested")
+            reqDict = dict(request.args)
+            dbConfig = comSettings() 
+        
+            if "resID" not in reqDict:
+                return jsonify("Database not specified")
+            else:
+                resID = reqDict["resID"]
+                databaseConnection = dbConfig["dbFilePath"] + resID + '.db'
+                db = create_engine(databaseConnection)
+                conn = db.connect() 
+                aJSON = request.get_json(force=True)
+
+                nowDate = datetime.now()
+
+                # send the update for the take
+                patchQuery = '''UPDATE Take
+                    SET Expected = ?,
+                        Actual = ?, 
+                        Difference = ?,
+                        Status = ?,
+                        ModDate = ?,
+                        ModUser = ?
+                    WHERE TakeID = ?'''
+                patchValues = (
+                    aJSON["Expected"], 
+                    aJSON["Actual"], 
+                    aJSON["Difference"],
+                    aJSON["Status"], 
+                    nowDate,
+                    aJSON["UserID"], 
+                    aJSON["TakeID"]) 
+                conn.execute(patchQuery, patchValues)
+                conn.close
+                return jsonify("Success")
+
+class DailyTakeByDate(Resource):
+
+    def get(self):
+        print("Daily Take List Requested")
+        reqDict = dict(request.args)
+        dbConfig = comSettings() 
+        
+        if "resID" in reqDict:
+            resID = reqDict["resID"]
+            databaseConnection = dbConfig["dbFilePath"] + resID + '.db'
+            db = create_engine(databaseConnection)
+            conn = db.connect() 
+
+            if "startdate" in reqDict and "enddate" in reqDict:
+                startDate = reqDict["startdate"]
+                endDate = reqDict["enddate"]
+            else:
+                return jsonify("Error - Dates were not specified")
+            # Set the basic response query
+            sqlReq = 'SELECT * FROM DailyTakeSum where Date > ? AND Date <= ? ORDER BY Date'
+
+            values = [startDate, endDate]
+            query = conn.execute(sqlReq, values) # This line performs query and returns json result
+            
+            conn.close
+            result = {'DailyTakes': [dict(zip(tuple (query.keys()) ,i)) for i in query.cursor]}
+            return jsonify(result)
+
+        else:
+            return jsonify("invalid request - no resid found")
 
 
 # 1000001

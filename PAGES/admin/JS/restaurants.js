@@ -1,5 +1,4 @@
 function loadList() {
-
     var request = new XMLHttpRequest() // Create a request variable and assign a new XMLHttpRequest object to it.
     appURL = gURL + '/restaurant';
 
@@ -9,7 +8,6 @@ function loadList() {
         // Begin accessing JSON data here
         // Begin accessing JSON data here
         var dataRes = JSON.parse(this.response);
-
         resData = dataRes.Restaurants;
 
         var cols = [];

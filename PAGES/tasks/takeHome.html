@@ -1,0 +1,111 @@
+<!doctype html>
+
+<html>
+
+<head>
+    <title>Sweet Pickle - Profitability for Restaurants</title>
+    <link rel="stylesheet" href="../../CSS/default.css">
+    <link rel="stylesheet" href="../../CSS/takeHome.css">
+
+    <script src="../../JS/toolkit.js"></script>
+    <script src="../../JS/takehome.js"></script>
+</head>
+
+<body onload="takeHomeOnLoad()">
+    <!-- The sidebar -->
+    <div class="sidebar">
+        <p id="resName">Restaurant Name</p>
+        <hr>
+        <a href="../../main.html">Home</a>
+        <a class="active" href="takeHome.html">Takes</a>
+        <a href="PAGES/admin/status.html">Admin</a>
+        <hr>
+        <a id="profile" href="../../PAGES/profiles/profile.html">Name</a>
+    </div>
+
+    <!-- The breadcrumb menu -->
+
+    <ul class="breadcrumb">
+        <li>Take Summary</li>
+    </ul>
+    <!-- Content -->
+    <div class="content">
+        <div>
+            <!-- Page Content -->
+            <p> lots of take sheets here </p>
+            <button type="button" class="stdButton" onclick="loadWeekTakes()">Load Take Week</button>
+        </div>
+        <!--https://www.w3schools.com/howto/howto_css_cards.asp-->
+        <div id="weekView_sample">
+            <div class="card card_complete">
+                <img src="../../IMAGES/complete.png" alt="Avatar" style="width:100%">
+                <div class="container">
+                    <h4><b>22 - Mn</b></h4>
+                    <p>Complete</p>
+                    <p>Actual: $1,235.23</p>
+                    <p>Budget: $1,200.00</p>
+                </div>
+            </div>
+            <div class="card card_incomplete">
+                <img src="../../IMAGES/incomplete.png" alt="Avatar" style="width:100%">
+                <div class="container">
+                    <h4><b>23 - Tu</b></h4>
+                    <p>Incomplete</p>
+                    <p><i>Actual: $ 1,161.39</i></p>
+                    <p>Budget: $ 1,100.00</p>
+                </div>
+            </div>
+            <div class="card card_complete">
+                <img src="../../IMAGES/complete.png" alt="Avatar" style="width:100%">
+                <div class="container">
+                    <h4><b>24 - Wd</b></h4>
+                    <p>Complete</p>
+                    <p>Actual: $ 1,095.39</p>
+                    <p>Budget: $ 1,100</p>
+                </div>
+            </div>
+            <div class="card">
+                <img src="../../IMAGES/star_today.png" alt="Avatar" style="width:100%">
+                <div class="container">
+                    <h4><b>25 - Th</Th></b></h4>
+                    <p>In-Progress</p>
+                    <p><i>Actual: $ 567.12</i></p>
+                    <p>Budget: $ 1,100.00</p>
+                </div>
+            </div>
+            <div class="card card_ready">
+                <img src="../../IMAGES/Ready.png" alt="Avatar" style="width:100%">
+
+                <div class="container">
+                    <h4><b>26 - Fr</b></h4>
+                    <p>Ready</p>
+                    <p><i>Actual: $ -.--</i></p>
+                    <p>Budget: $ 1,200.00</p>
+                </div>
+            </div>
+            <div class="card card_ready">
+                <img src="../../IMAGES/Ready.png" alt="Avatar" style="width:100%">
+                <div class="container">
+                    <h4><b>27 - Sa</b></h4>
+                    <p>Ready</p>
+                    <p><i>Actual: $ -.--</i></p>
+                    <p>Budget: $ 1,400.00</p>
+                </div>
+            </div>
+            <div class="card card_undefined">
+                <img src="../../IMAGES/undefined.png" alt="Avatar" style="width:100%">
+                <div class="container">
+                    <h4><b>28 - Su</b></h4>
+                    <p>Not Defined</p>
+                    <p></p>
+                    <p></p>
+                </div>
+            </div>
+        </div>
+        <div id="weekView">
+        </div>
+    </div>
+
+</body>
+
+</html>

@@ -1,5 +1,7 @@
 // -- Toolkit functions
 
+var gDate = ""
+
 // Designed to allow the staff takes to expand
 function takeExpand() {
     var coll = document.getElementsByClassName("collapsible");
@@ -18,9 +20,142 @@ function takeExpand() {
     }
 }
 
+// navigate to the previous day
+function prevDay() {
+    newDate = dayChange(gDate, -1)
+    newUrl = "take.html?date=" + newDate
+    document.location.href = newUrl;
+}
+
+//navigate to the next day
+function nextDay() {
+    newDate = dayChange(gDate, 1)
+    newUrl = "take.html?date=" + newDate
+    document.location.href = newUrl;
+
+}
 
 // -- Main page functions --
 
+// post the new DailyTake
+function newDailyTake() {
+    var resURL = gURL + '/dailytake?resID=' + getResID();
+
+    var empObj = {
+        "Budget": document.getElementById("budgetNew").value,
+        "Date": gDate,
+        "UserID": getUserID()
+    };
+    console.log(empObj);
+    var empJSON = JSON.stringify(empObj);
+    var request = new XMLHttpRequest();
+
+    request.open('POST', resURL, true);
+
+    request.onload = function() {
+        // Begin accessing JSON data here
+        var dtID = JSON.parse(this.response);
+        console.log(dtID);
+        loadTakeSheets();
+    }
+
+    request.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    request.send(empJSON);
+}
+
+// offer to create a new basic Daily Take, create from a previous template, or cancel
+function newBudget() {
+    console.log("Going to create a new Daily Take")
+        // hide the stuff we don't need
+    document.getElementById("pageTitle").innerHTML = "Get that budget!"
+
+    //Open a modal window for editing the basic takes
+    var modal = document.getElementById("createTakeModal");
+
+    // Get the buttons for the modal
+    var createBtn = document.getElementById("CreateTaskBtn");
+    var xBtn = document.getElementById("CancelTaskBtn");
+
+    // open the modal 
+    modal.style.display = "block";
+
+    // When the user clicks on new, prompt for budget and create
+    createBtn.onclick = function() {
+        //create a new daily take
+        modal.style.display = "none";
+        newDailyTake();
+    }
+
+    // When the user clicks on the cancel button close the modal
+    xBtn.onclick = function() {
+        modal.style.display = "none";
+        newDailyTakeSelect()
+    }
+
+    // When the user clicks anywhere outside of the modal, close it
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+            newDailyTakeSelect()
+        }
+    }
+}
+
+// prompt to create a new dailyTake
+function newDailyTakeSelect() {
+    // offer to create a new basic Daily Take, create from a previous template, or cancel
+    console.log("Going to create a new Daily Take")
+        // hide the stuff we don't need
+    document.getElementById("mainTakeDiv").hidden = true
+    document.getElementById("pageTitle").innerHTML = "Create a new Daily Task sheet"
+
+    //Open a modal window for editing the basic takes
+    var modal = document.getElementById("newTakeModal");
+    document.getElementById("ntHeader").innerHTML = "Create a new Daily Task for: "
+
+    // Get the buttons for the modal
+    var newBtn = document.getElementById("mNewTaskBasic");
+    var copyBtn = document.getElementById("mNewTaskCopy");
+    var cancelBtn = document.getElementById("mNewTaskCancel");
+
+    // open the modal 
+    modal.style.display = "block";
+
+    // When the user clicks on new, prompt for budget and create
+    newBtn.onclick = function() {
+        //create a new daily take
+        modal.style.display = "none";
+        newBudget()
+    }
+
+    // When the user clicks on confirm, set the userID and close the modal
+    copyBtn.onclick = function() {
+        //display list of previous takes
+        modal.style.display = "none";
+    }
+
+    // When the user clicks on the cancel button close the modal
+    cancelBtn.onclick = function() {
+        modal.style.display = "none";
+        window.history.back();
+    }
+
+    // When the user clicks anywhere outside of the modal, close it
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+            window.history.back();
+        }
+    }
+}
+
+// create a new Staff Take sheet
+function newStaffTake() {
+    newUrl = "stafftake.html?dtID=" + document.getElementById("dtID").value
+    document.location.href = newUrl;
+}
+
+// send the request to update the Daily take
 function patchDailyTake() {
 
     var JSONProfile = getCookie("spProfile");
@@ -57,7 +192,7 @@ function patchDailyTake() {
 // Edit Daily Take sheets for basic values
 function editDailyTake() {
     //Open a modal window for editing the basic takes
-    var modal = document.getElementById("myModal");
+    var modal = document.getElementById("editTakeModal");
 
     // Prepare the message
     document.getElementById("mHeader").innerHTML = "Please adjust the details for this days Take sheet"
@@ -79,16 +214,6 @@ function editDailyTake() {
     confirmBtn.onclick = function() {
         patchDailyTake();
         modal.style.display = "none";
-
-        /*        user = userProfile["UserID"];
-                document.getElementById("userID").value = user;
-                var message = "The following User will be used: " + user;
-                updateStatus(message, "sumDetails");
-                message = "Provisioning restaurant...";
-                updateStatus(message, "sumDetails");
-                modal.style.display = "none";
-                provisionRestaurant();
-                */
     }
 
     // When the user clicks on the cancel button close the modal
@@ -109,14 +234,13 @@ function editDailyTake() {
 function loadTakeSheets() {
     //request data for the daily take
     // var today = nowDateUTC() // - note before using this, the date needs to be adjusted for local time
-    today = '2020-05-03'
-    console.log(today);
 
     var request = new XMLHttpRequest() // Create a request variable and assign a new XMLHttpRequest object to it.
         //check URL, if no parameter then assume today
-        //resID = getResID() - broken
-    var resID = '1000001'
-    var resURL = gURL + '/dailytake?resID=' + resID + '&Date=' + today;
+    resID = getResID()
+    console.log(resID)
+        //var resID = '1000001'
+    var resURL = gURL + '/dailytake?resID=' + resID + '&Date=' + gDate;
     console.log(resURL);
 
     request.open('GET', resURL, true) // Open a new connection, using the GET request on the URL endpoint
@@ -124,6 +248,14 @@ function loadTakeSheets() {
     request.onload = function() {
         // Begin accessing JSON data here
         var request = JSON.parse(this.response);
+
+        // check if no records were returned, if so, trigger to create a new Daily Task
+        dailyTakes = request.DailyTake
+        if (dailyTakes.length == 0) {
+            newDailyTakeSelect();
+            return
+        }
+        document.getElementById("mainTakeDiv").hidden = false
         dtData = request.DailyTake[0];
         console.log(dtData);
 
@@ -209,14 +341,13 @@ function loadTakeSheets() {
 
         //load the Daily Take values
         document.getElementById("dtID").value = dtData["DailyTakeID"]
-        document.getElementById("dayOfWeek").innerHTML = dtData["Date"];
         document.getElementById("GST").innerHTML = dtData["GST"];
         document.getElementById("PST").innerHTML = dtData["PST"];
         document.getElementById("budget").innerHTML = dtData["Budget"];
         dailyNet = sumActual - Number(dtData["GST"]) - Number(dtData["PST"])
         document.getElementById("netTotal").innerHTML = dailyNet.toFixed(2)
         dailyBudget = dailyNet - dtData["Budget"]
-        document.getElementById("sumBudget").innerHTML = dailyBudget.toFixed(2)
+        document.getElementById("pageTitle").innerHTML = dailyBudget.toFixed(2)
 
         // -- load all the Staff Take data --
         var takeData = dtData["StaffTakes"];
@@ -244,7 +375,7 @@ function loadTakeSheets() {
             // add the manager details <span class="buttonText">Jerri: Day Sheet </span>
             var takeSpanMgr = document.createElement("SPAN");
             takeSpanMgr.className = "buttonText";
-            takeSpanMgr.innerHTML = takeSheet["EmployeeID"] + " : " + takeSheet["Shift"];;
+            takeSpanMgr.innerHTML = takeSheet["FullName"] + " : " + takeSheet["Shift"];;
             document.getElementById(buttonID).appendChild(takeSpanMgr);
 
             // create the status section (to be filled in later) - <span class="rightTextDetail">Task Complete!</span>
@@ -310,7 +441,7 @@ function loadTakeSheets() {
             //add the hidden div for detailed content - <div class="content">
             var takeDetailID = "takeDetailID" + i;
             var takeDetailDiv = document.createElement("DIV");
-            takeDetailDiv.className = "content";
+            takeDetailDiv.className = "collapseContent";
             takeDetailDiv.id = takeDetailID;
             document.getElementById(takeDivID).appendChild(takeDetailDiv);
 
@@ -357,13 +488,28 @@ function loadTakeSheets() {
             //add the table to the detail tab
             document.getElementById(takeDetailID).appendChild(table);
 
+            // add a button to edit the staff take
+            var editSTButton = document.createElement("button")
+            var editSTID = "stButton" + i;
+            editSTButton.className = "stdButton";
+            editSTButton.id = editSTID;
+            editSTButton.innerHTML = "Edit Staff Take"
+            var createClickHandler = function(stID) {
+                return function() {
+                    location.replace("stafftake.html?stID=" + stID);
+                };
+            }
+            editSTButton.onclick = createClickHandler(takeSheet["StaffTakeID"]);
+            document.getElementById(takeDivID).appendChild(editSTButton);
+
+
             // change the background by changing the class if the status is incomplete
             stStatus = document.getElementById(statusID).innerHTML
             if (stStatus == 0) {
                 document.getElementById(statusID).innerHTML = "Complete!";
                 document.getElementById("takeProgress").value = Number(document.getElementById("takeProgress").value) + 1;
             } else {
-                document.getElementById(buttonID).style.backgroundColor = "#FCAE1E";
+                document.getElementById(buttonID).style.backgroundColor = "#FFD1DC";
                 document.getElementById(statusID).innerHTML = "Incomplete!";
             }
 
@@ -377,5 +523,16 @@ function loadTakeSheets() {
 }
 
 function onLoadTask() {
+    //grab the date from the URL. If no date, assume today
+    var pageParams = getParams(window.location.href)
+    var rID = pageParams["date"]
+
+    if ("date" in pageParams) {
+        gDate = pageParams["date"];
+    } else {
+        gDate = nowDateUTC()
+    }
+    document.getElementById("dtDate").innerHTML = gDate;
+
     loadTakeSheets();
 }

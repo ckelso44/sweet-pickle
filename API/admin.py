@@ -19,7 +19,7 @@ class Employee(Resource):
         conn = db_connect.connect() # connect to database
         reqDict = request.args 
 
-        sqlReq = 'SELECT EmployeeID, UserID, RestaurantID, Active, Permission FROM Employees'
+        sqlReq = 'SELECT EmployeeID, UserID, RestaurantID, Active, Name FROM EmpView'
         # If there are no arguments, set a basic request for all records
         if len(reqDict) == 0 :
             fullReq = '' + sqlReq + ''
