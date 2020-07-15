@@ -31,6 +31,7 @@ html {
 
 body {
     margin: 0px;
+    font-family: Bahnschrift, Roboto;
 }
 
 div.default {
@@ -47,6 +48,19 @@ div.default {
     margin-bottom: 5px;
 }
 
+
+/* styling for date based nav bar */
+
+.navPageDiv {
+    text-align: center;
+}
+
+.navPageItem {
+    text-decoration: none;
+    color: var(--Colour-0);
+    font-size: 42px;
+}
+
 p {
     color: var(--Colour-1);
     font-size: large;
@@ -54,7 +68,7 @@ p {
 }
 
 label {
-    color: var(--Colour-3);
+    color: var(--Colour-5);
     font-size: large;
     display: block;
     padding: 5px;
@@ -178,6 +192,7 @@ div.content {
     padding: 1px 16px;
     height: 1000px;
     margin-top: 20px;
+    align-items: center;
 }
 
 
@@ -290,7 +305,7 @@ ul.breadcrumb li a:hover {
     margin: auto;
     padding: 0;
     border: 0px none;
-    width: 80%;
+    width: 60%;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
     -webkit-animation-name: animatetop;
     -webkit-animation-duration: 0.4s;
@@ -345,16 +360,17 @@ ul.breadcrumb li a:hover {
     padding: 2px 16px;
     border: none;
     border-radius: 0px;
-    background-color: var(--Colour-0);
+    background-color: var(--Colour-5);
 }
 
 .modal-body {
     border: none;
-    padding: 2px 16px;
+    padding: 8px 16px;
+    background-color: var(--Colour-1);
 }
 
 .mHeader {
-    color: var(--Colour-3);
+    color: var(--Colour-0);
 }
 
 #mDetails {
@@ -365,22 +381,86 @@ ul.breadcrumb li a:hover {
 .mButton,
 .mButtonCancel {
     width: 25%;
-    position: relative;
     display: inline-block;
     text-align: center;
     font-weight: bold;
-    color: var(--Colour-3);
+    color: var(--Colour-5);
+    background-color: var(--Colour-1);
+    margin: 6px;
+    padding: 3px;
+    border-radius: 5px;
 }
 
 .mButton:hover,
 .mButton:focus,
 .mButtonCancel:hover,
 .mButtonCancel:focus {
-    background-color: var(--Colour-2);
-    color: var(--Colour-0);
+    background-color: var(--Colour-0);
+    color: var(--Colour-5);
     cursor: pointer;
 }
 
 .mButtonCancel {
     float: right;
+}
+
+
+/* w3 - Responsive Text Entry https://www.w3schools.com/howto/howto_css_responsive_form.asp */
+
+input[type=text],
+input[type=number],
+select,
+textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    resize: vertical;
+}
+
+
+/* Style the label to display next to the inputs */
+
+label {
+    padding: 12px 12px 12px 0;
+    display: inline-block;
+}
+
+
+/* Floating column for labels: 25% width */
+
+.formColumnLabel {
+    float: left;
+    width: 25%;
+    margin-top: 6px;
+}
+
+
+/* Floating column for inputs: 75% width */
+
+.formColumnValue {
+    float: left;
+    width: 75%;
+    margin-top: 6px;
+}
+
+
+/* Clear floats after the columns */
+
+.formRow:after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+
+/* Responsive layout - when the screen is less than 600px wide, make the two columns stack on top of each other instead of next to each other */
+
+@media screen and (max-width: 600px) {
+    .formColumnLabel,
+    .formColumnValue {
+        width: 100%;
+        margin-top: 0;
+    }
 }

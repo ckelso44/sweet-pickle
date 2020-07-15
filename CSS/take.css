@@ -12,23 +12,6 @@ hr {
 }
 
 
-/* styling for take sheets*/
-
-body {
-    font-family: Bahnschrift, Roboto;
-}
-
-#navPageDiv {
-    text-align: center;
-}
-
-.navPageItem {
-    text-decoration: none;
-    color: var(--Colour-0);
-    font-size: 42px;
-}
-
-
 /* styling for take summary*/
 
 .stdDiv {
@@ -100,7 +83,9 @@ td {
     padding: 3px 10px 3px 10px;
 }
 
-.sumValue {
+.sumValue,
+.sumValueTotal {
+    text-align: right;
     text-emphasis: strong;
 }
 
@@ -108,7 +93,6 @@ td {
     border-width: 1px 0px 0px 0px;
     border-style: solid;
     border-color: var(--Colour-2);
-    text-emphasis: strong;
 }
 
 #sumTakeText {
@@ -131,7 +115,13 @@ td {
     margin: 5px;
 }
 
-tr:hover {
+.sumValue:before,
+.sumValueTotal:before,
+.detailTotal:before {
+    content: '$ ';
+}
+
+.editRow:hover {
     background-color: var(--Highlight);
     cursor: pointer;
 }
@@ -141,7 +131,12 @@ tr:hover {
 }
 
 #progressDiv {
-    background-color: white;
+    background-color: var(--Colour-5);
+}
+
+#progressLabel {
+    color: var(--Colour-0);
+    font-weight: bolder;
 }
 
 
@@ -192,13 +187,13 @@ tr:hover {
 /* Style the collapsible content. Note: hidden by default */
 
 .collapseContent {
-    padding: 0 18px;
+    padding: 0px;
     background-color: white;
     max-height: 0;
     overflow: hidden;
     border-style: solid;
     border-color: var(--Colour-0);
-    border-width: 0px 2px 2px 2px;
+    border-width: 0px;
     border-radius: 0px 0px 15px 15px;
     transition: max-height 0.2s ease-out;
 }
@@ -216,4 +211,22 @@ tr:hover {
 
 .rightTextDetail {
     float: right;
+}
+
+
+/* formatting specific to Staff Takes */
+
+#stTitle {
+    text-align: left;
+}
+
+#status {
+    font-style: italic;
+    font-size: x-large;
+    color: var(--Colour-5);
+}
+
+#newTaskMsg {
+    text-emphasis: strong;
+    color: var(--Colour-5)
 }

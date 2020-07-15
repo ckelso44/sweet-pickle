@@ -17,45 +17,90 @@
 </head>
 
 <body onload="stOnLoad()">
-    <div class="stdDiv">
-        <form>
-            <fieldset>
-                <!-- hidden section for ID's-->
-                <div class="hiddenIDs">
-                    <label>DailyTake ID:
-                        <input type="number" id="dtID">
-                    </label>
-                    <label>StaffTake ID:
-                        <input type="number" id="stID">
-                    </label>
-                </div>
-                <h2>Staff Take</h2>
-
-                <label for="staff">Staff Member:</label>
-                <div class="selectList">
-                    <select id="staff" name="staff"></select>
-                </div>
-
-                <label for="shift">Shift:</label>
-                <div class="selectList">
-                    <select id="shift" name="shift" onchange="viewOther()"></select>
-                </div>
-                <div id="otherShift" hidden>
-                    <label id="otherLabel">Other Shift:
-                        <input type="text" id="other">
-                    </label>
-                </div>
-                <label>Status:
-                    <input type="text" id = "status" readonly>
-                </label>
-            </fieldset>
-            <button type="button" id="btnApply" class="formButton" onclick="applyStaffTake()">Apply</button>
-            <button type="button" id="btnSave" class="formButton" onclick="saveStaffTake()">Save</button>
-            <button type="button" id="btnCancel" class="formButton" onclick="returnDailyTake()">Cancel</button>
-            <button type="button" id="btnDelete" class="formButton" hidden>Delete</button>
-        </form>
+    <!-- The sidebar -->
+    <div class="sidebar">
+        <p id="resName">Restaurant Name</p>
+        <hr>
+        <a href="../../main.html">Home</a>
+        <a class="active" href="takeHome.html">Takes</a>
+        <a href="PAGES/admin/status.html">Admin</a>
+        <hr>
+        <a id="profile" href="../../PAGES/profiles/profile.html">Name</a>
     </div>
-    <div class="stdDiv" id="takesheets"></div>
+
+    <!-- The breadcrumb menu -->
+
+    <ul class="breadcrumb">
+        <li><a href="takeHome.html">Take Summary</a></li>
+        <li><a id="takePage">Take Page</a></li>
+        <li>Daily Take Sheet</li>
+    </ul>
+
+    <!-- Content -->
+
+    <div class="content">
+
+        <div class="stdDiv" id="stDiv">
+            <form>
+                <fieldset>
+                    <!-- hidden section for ID's-->
+                    <div class="hiddenIDs" hidden>
+                        <label>DailyTake ID:
+                            <input type="number" id="dtID">
+                        </label>
+                        <label>StaffTake ID:
+                            <input type="number" id="stID">
+                        </label>
+                    </div>
+
+                    <!-- Title part -->
+                    <h2 id="stTitle">Staff Take: </h2>
+                    <p id="status">Select APPLY to add payments</p>
+
+                    <!-- imput section -->
+                    <div class="formRow">
+                        <div class="formColumnLabel">
+                            <label for="staff">Staff Member:</label>
+                        </div>
+                        <div class="formColumnValue">
+                            <div class="selectList">
+                                <select id="staff" name="staff">
+                                    <option value=""></option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="formRow">
+                        <div class="formColumnLabel">
+                            <label for="shift">Shift:</label>
+                        </div>
+                        <div class="formColumnValue">
+                            <div class="selectList">
+                                <select id="shift" name="shift" onchange="viewOther()">
+                                        <option value=""></option>
+                                    </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="formRow" id="otherShift" hidden>
+                        <div class="formColumnLabel">
+                            <label id="otherLabel">Other Shift:</label>
+                        </div>
+                        <div class="formColumnValue">
+                            <input type="text" id="other">
+                        </div>
+                    </div>
+                </fieldset>
+                <button type="button" id="btnApply" class="formButton" onclick="applyStaffTake()">Apply</button>
+                <button type="button" id="btnSave" class="formButton" onclick="saveStaffTake()">Save</button>
+                <button type="button" id="btnCancel" class="formButton" onclick="returnDailyTake()">Cancel</button>
+                <button type="button" id="btnDelete" class="formButton" hidden>Delete</button>
+            </form>
+        </div>
+        <div class="stdDiv" id="takesheets"></div>
+    </div>
+    <!-- content-->
 </body>
 
 <div id="myModal" class="modal">
@@ -63,23 +108,44 @@
     <!-- Modal content -->
     <div class="modal-content">
         <div class="modal-header">
-            <h2 id="mHeader">Modal Header</h2>
+            <h3 id="mHeader">Modal Header</h3>
         </div>
         <div class="modal-body">
             <form>
                 <fieldset>
                     <input type='text' id='tID' hidden>
-                    <label>Expected: <input type='number' id = 'expected' onchange="calcTake()"></label><br>
-                    <label>Actual: <input type='number' id = 'actual' onchange="calcTake()"></label><br>
-                    <br>
-                    <label>Difference: <input type='number' id = 'difference' disabled></label><br>
+                    <div class="formRow">
+                        <div class="formColumnLabel">
+                            <label>Expected: </label>
+                        </div>
+                        <div class="formColumnValue">
+                            <input type='number' id='expected' onchange="calcTake()">
+                        </div>
+                    </div>
+                    <div class="formRow">
+                        <div class="formColumnLabel">
+                            <label>Actual: </label>
+                        </div>
+                        <div class="formColumnValue">
+                            <input type='number' id='actual' onchange="calcTake()">
+                        </div>
+                    </div>
+
+                    <div class="formRow">
+                        <div class="formColumnLabel">
+                            <label>Difference: </label>
+                        </div>
+                        <div class="formColumnValue">
+                            <input type='number' id='difference' disabled>
+                        </div>
+                    </div>
                     <label>Complete: <input type='checkbox' id = 'pStatus' disabled></label>
                 </fieldset>
             </form>
         </div>
         <div class="modal-footer">
-            <span class="mButton" id="mButtonConfirm">Confirm</span>
-            <span class="mButton" id="mButtonCancel">Cancel</span>
+            <div class="mButton" id="mButtonConfirm">Confirm</div>
+            <div class="mButton" id="mButtonCancel">Cancel</div>
         </div>
     </div>
 </div>

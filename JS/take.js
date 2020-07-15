@@ -56,7 +56,7 @@ function newDailyTake() {
         // Begin accessing JSON data here
         var dtID = JSON.parse(this.response);
         console.log(dtID);
-        loadTakeSheets();
+        loadTakeSheet();
     }
 
     request.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
@@ -111,7 +111,7 @@ function newDailyTakeSelect() {
 
     //Open a modal window for editing the basic takes
     var modal = document.getElementById("newTakeModal");
-    document.getElementById("ntHeader").innerHTML = "Create a new Daily Task for: "
+    document.getElementById("ntHeader").innerHTML = "Create a new Daily Task for : <br>" + gDate
 
     // Get the buttons for the modal
     var newBtn = document.getElementById("mNewTaskBasic");
@@ -231,7 +231,7 @@ function editDailyTake() {
 }
 
 // -- inital load for the daily take summary and saff take sheets
-function loadTakeSheets() {
+function loadTakeSheet(type, value) {
     //request data for the daily take
     // var today = nowDateUTC() // - note before using this, the date needs to be adjusted for local time
 
@@ -240,7 +240,11 @@ function loadTakeSheets() {
     resID = getResID()
     console.log(resID)
         //var resID = '1000001'
-    var resURL = gURL + '/dailytake?resID=' + resID + '&Date=' + gDate;
+    if (type == "date") {
+        var resURL = gURL + '/dailytake?resID=' + resID + '&Date=' + value;
+    } else {
+        var resURL = gURL + '/dailytake?resID=' + resID + '&DailyTakeID=' + value;
+    }
     console.log(resURL);
 
     request.open('GET', resURL, true) // Open a new connection, using the GET request on the URL endpoint
@@ -255,10 +259,11 @@ function loadTakeSheets() {
             newDailyTakeSelect();
             return
         }
+
         document.getElementById("mainTakeDiv").hidden = false
         dtData = request.DailyTake[0];
         console.log(dtData);
-
+        document.getElementById("dtDate").innerHTML = dtData["Date"];
         //Load the SumDetails into a table, adding the Expected and Actual totals
         var sumExpected = 0
         var sumActual = 0
@@ -341,13 +346,14 @@ function loadTakeSheets() {
 
         //load the Daily Take values
         document.getElementById("dtID").value = dtData["DailyTakeID"]
-        document.getElementById("GST").innerHTML = dtData["GST"];
-        document.getElementById("PST").innerHTML = dtData["PST"];
-        document.getElementById("budget").innerHTML = dtData["Budget"];
+        document.getElementById("GST").innerHTML = Number(dtData["GST"]).toFixed(2);
+        document.getElementById("PST").innerHTML = Number(dtData["PST"]).toFixed(2);
+        rBudget = Number(dtData["Budget"]).toFixed(2)
+        document.getElementById("budget").innerHTML = rBudget;
         dailyNet = sumActual - Number(dtData["GST"]) - Number(dtData["PST"])
         document.getElementById("netTotal").innerHTML = dailyNet.toFixed(2)
-        dailyBudget = dailyNet - dtData["Budget"]
-        document.getElementById("pageTitle").innerHTML = dailyBudget.toFixed(2)
+        dailyBudget = dailyNet - rBudget
+        document.getElementById("pageTitle").innerHTML = "Total budget difference is: $" + dailyBudget.toFixed(2)
 
         // -- load all the Staff Take data --
         var takeData = dtData["StaffTakes"];
@@ -452,7 +458,7 @@ function loadTakeSheets() {
             var tr = header.insertRow(-1);
             var headerList = ["Payment", "Expected", "Actual", "Difference"]
 
-            // Figure out how to get the header in there        var theader = document.createElement() 
+            // Figure out how to get the header in there        
             for (var j = 0; j < headerList.length; j++) {
 
                 // Create the table header the element
@@ -473,12 +479,13 @@ function loadTakeSheets() {
                     var cell = tr.insertCell(-1);
                     if (k == 0) {
                         cell.className = "sumRow";
+                        cell.innerHTML = take[headerList[k]];
                     } else {
                         cell.className = "sumValue";
                         sumStaffTakeCell = Number(document.getElementById(sumIDs[k]).innerHTML) + Number(take[headerList[k]])
-                        document.getElementById(sumIDs[k]).innerHTML = sumStaffTakeCell;
+                        document.getElementById(sumIDs[k]).innerHTML = sumStaffTakeCell.toFixed(2);
+                        cell.innerHTML = Number(take[headerList[k]]).toFixed(2);
                     }
-                    cell.innerHTML = take[headerList[k]];
                 }
                 //update the status of the staff take
                 curStatus = document.getElementById(statusID).innerHTML;
@@ -522,17 +529,20 @@ function loadTakeSheets() {
     request.send()
 }
 
-function onLoadTask() {
+function takeOnLoad() {
+    // initialize the page and validate the user
+    setMenu()
+
     //grab the date from the URL. If no date, assume today
     var pageParams = getParams(window.location.href)
-    var rID = pageParams["date"]
 
-    if ("date" in pageParams) {
-        gDate = pageParams["date"];
+    if ("dtID" in pageParams) {
+        loadTakeSheet("id", pageParams["dtID"])
+    } else if ("date" in pageParams) {
+        gDate = pageParams["date"]
+        loadTakeSheet("date", gDate);
     } else {
         gDate = nowDateUTC()
+        loadTakeSheet("date", gDate);
     }
-    document.getElementById("dtDate").innerHTML = gDate;
-
-    loadTakeSheets();
 }

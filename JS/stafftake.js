@@ -130,7 +130,8 @@ function editPayment(payObj) {
     var modal = document.getElementById("myModal");
 
     // Prepare the message
-    document.getElementById("mHeader").innerHTML = "Enter new values for they payment: " + payObj["Payment"]
+    paymentText = payObj["Payment"]
+    document.getElementById("mHeader").innerHTML = "Enter new values for " + paymentText.toUpperCase() + " payments"
     document.getElementById("tID").value = payObj["TakeID"]
     var expected = payObj["Expected"]
     if (expected != undefined && expected != "") {
@@ -198,7 +199,7 @@ function loadTakes(stID) {
         var request = JSON.parse(this.response);
         stData = request.StaffTake[0];
         console.log(stData);
-
+        document.getElementById("stTitle").innerHTML = "Take Entry for " + stData["Date"]
         document.getElementById("staff").value = stData["EmployeeID"]
         document.getElementById("shift").value = stData["Shift"]
         document.getElementById("stID").value = stID
@@ -212,13 +213,14 @@ function loadTakes(stID) {
              */
         tData = stData["Takes"]
         if (tData.length == 0) {
-            stStatus.value = "Warning - Takes Missing"
+            stStatus.innerHTML = "Warning - Takes Missing"
             return;
         } else if (stData["Status"] == "0") {
-            stStatus.value = "Complete"
+            stStatus.innerHTML = "All payments have been entered"
                 // use elseif to call function dateOffset to compare date and set to ready 
         } else {
-            stStatus.value = "Incomplete"
+            stStatus.innerHTML = "Some payments have not been entered"
+            document.getElementById("stDiv").style.backgroundColor = getComputedStyle(document.documentElement).getPropertyValue('--Alert');
         }
 
         // Load the takes
@@ -243,7 +245,8 @@ function loadTakes(stID) {
         // console.log(takes)
         for (var j = 0; j < tData.length; j++) { // for each of the take sheets
             var tr = body.insertRow(-1);
-            //var createClickHandler = function(row, appId) {
+            tr.className = "editRow"
+                //var createClickHandler = function(row, appId) {
             var createClickHandler = function(row, take) {
                 return function() {
                     var cell = row.getElementsByTagName("td")[0];
@@ -256,7 +259,7 @@ function loadTakes(stID) {
             //var id = appData[i].ApplicationID;
             //tr.onclick = createClickHandler(tr, id);
             var take = tData[j];
-            console.log(take)
+            //console.log(take)
             tr.onclick = createClickHandler(tr, take);
             //fill in the cells for the take values
             for (var k = 0; k < headerList.length; k++) {
@@ -265,15 +268,16 @@ function loadTakes(stID) {
                 if (k == 0) {
                     cell.className = "sumRow";
                     cell.innerHTML = tValue
-                } else if (k == 4) {
+                } else if (k == 4) { // if this is the status column, set a check or x
                     cell.className = "noSum";
                     if (tValue == 0) {
                         cell.innerHTML = "&#10004"
-                    }
+                    } else { cell.innerHTML = "&#63" }
                 } else {
-                    if (tValue == undefined || tValue == "") {
+                    if (tValue === undefined || tValue === "" || tValue === null) {
                         cell.className = "noSum";
                         cell.innerHTML = tValue
+                        console.log(tValue)
                     } else {
                         cell.className = "sumValue";
                         cell.innerHTML = Number(tValue).toFixed(2);
@@ -353,6 +357,7 @@ function loadStaff(resID) {
         // Begin accessing JSON data here
         var request = JSON.parse(this.response);
         empData = request.Employees;
+
         //console.log(empData);
         for (var i = 0; i < empData.length; i++) {
             // <option value="10001">Lucy May</option>
@@ -393,8 +398,7 @@ function saveStaffTake() {
 // cancel the staff take form
 function returnDailyTake() {
     //go back to the previous page without saving changes
-    newUrl = "take.html?dtID=" + document.getElementById("dtID").value
-    window.location.href = newUrl;
+    window.location.replace("take.html?dtID=" + document.getElementById("dtID").value)
 }
 
 // delete the staff take form
@@ -404,8 +408,11 @@ function deleteStaffTake() {
 
 // prepare the form when it loads
 function stOnLoad() {
-    // check for a ID's on the requestor URL
+    // initialize the page and validate the user
+    setMenu()
 
+
+    // check for a ID's on the requestor URL
     resID = getResID()
     loadStaff(resID);
     loadShifts(resID);
@@ -421,6 +428,7 @@ function stOnLoad() {
     } else if ("dtID" in pageParams) {
         console.log("we're going to create a new stafftake")
         document.getElementById("dtID").value = pageParams["dtID"]
+        document.getElementById("takePage").href = "take.html?dtID=" + pageParams["dtID"]
     } else {
         console.log("something went wrong")
     }

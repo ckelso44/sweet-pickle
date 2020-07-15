@@ -1,5 +1,21 @@
 /* JS page for the take sheet home page */
 
+//navigation functions for the week view
+// navigate to the previous week
+function prevWeek() {
+    newDate = dayChange(gDate, -7)
+    newUrl = "takehome.html?date=" + newDate
+    document.location.href = newUrl;
+}
+
+//navigate to the next week
+function nextWeek() {
+    newDate = dayChange(gDate, 7)
+    newUrl = "takehome.html?date=" + newDate
+    document.location.href = newUrl;
+
+}
+
 //create the individual cards
 function addCard(dTake, status, dow) {
     var card = document.createElement("div")
@@ -92,10 +108,10 @@ function noCard(cardDate, dow) {
 }
 
 //load the 7 day takes into cards
-function loadWeekTakes() {
+function loadWeekTakes(stDate, enDate) {
     var request = new XMLHttpRequest() // Create a request variable and assign a new XMLHttpRequest object to it.
-    var startDate = '2020-05-01'
-    var endDate = '2020-06-07'
+    startDate = formatDate(stDate)
+    endDate = formatDate(enDate)
     var resURL = gURL + '/dailytake/bydate?resID=' + getResID() + '&startdate=' + startDate + '&enddate=' + endDate;
     console.log(resURL);
 
@@ -108,20 +124,20 @@ function loadWeekTakes() {
         dtData = request.DailyTakes;
         console.log(dtData);
         var cardDate = startDate
-        var todayDate = "2020-05-05"
+        var todayDate = nowDate()
             // go through each day of the week and determine which card to build
         for (i = 0; i < 7; i++) {
             var found = false
-                //find the record for the date
-            console.log(cardDate)
-            var status = 'undefined'
+
+
             for (j = 0; j < dtData.length; j++) {
                 if (dtData[j].Date == cardDate) {
                     found = true
+                    console.log(cardDate)
                     if (cardDate == todayDate) {
                         addCard(dtData[j], "In-progress", days[i])
-                    } else if (cardDate <= todayDate) {
-                        if (dtData[j].Status == "0") {
+                    } else if (cardDate < todayDate) {
+                        if (dtData[j].Status == 0) {
                             addCard(dtData[j], "Complete", days[i])
                         } else {
                             addCard(dtData[j], "Incomplete", days[i])
@@ -144,7 +160,43 @@ function loadWeekTakes() {
 
 function takeHomeOnLoad() {
 
+    // initialize the page and validate the user
     setMenu()
-    loadWeekTakes()
+
+    //grab the date from the URL. If no date, assume today
+    var pageParams = getParams(window.location.href)
+    if ("date" in pageParams) {
+        gDate = pageParams["date"];
+    } else {
+        gDate = nowDate()
+    }
+    offset = dayOffset(gDate, nowDate())
+    console.log("URL date= " + pageParams["date"] + ", gDate = " + gDate)
+    console.log("offset= " + offset)
+
+    // check what day of the week it is to offset the start and end dates
+    var dayOfWeek = new Date(gDate)
+
+    var weekDay = dayOfWeek.getUTCDay()
+    var resStartOfWeek = 1 // the start of week will be eventually set by a preference
+    var sDate = new Date(dayOfWeek.getUTCFullYear(), dayOfWeek.getUTCMonth(), dayOfWeek.getUTCDate() - weekDay + resStartOfWeek)
+
+    //sDate.setUTCDate(dayOfWeek.getUTCDate() - weekDay + resStartOfWeek) //adjust based on start of week 
+    var eDate = new Date(sDate.getUTCFullYear(), sDate.getUTCMonth(), sDate.getUTCDate() + 6)
+        //console.log("day of week= " + dayOfWeek + ", startDate = " + sDate + ", end date: " + eDate)
+
+    // set the label for the page based on the week the target date falls into
+    if (offset > -6 && offset < 7) {
+        document.getElementById("dtDate").innerHTML = "This Week";
+    } else if (offset > -13 && offset < -6) {
+        document.getElementById("dtDate").innerHTML = "Last Week";
+    } else if (offset < 14 && offset > 6) {
+        document.getElementById("dtDate").innerHTML = "Next Week";
+    } else {
+        document.getElementById("dtDate").innerHTML = "Week of: " + formatDate(sDate);
+    }
+
+
+    loadWeekTakes(sDate, eDate)
 
 }

@@ -78,12 +78,11 @@ var getParams = function(url) {
 };
 
 /**
- * Return a date in the format compatible to the database
+ * Return today's date in a format compatible to the database
  * @param  <none>
  * @return {string}     The date in a YYYY-MM-DD format
  */
-
-var nowDateUTC = function() {
+var nowDate = function() {
     var d = new Date();
     var month = d.getMonth() + 1
     if (month < 10) { month = "0" + month }
@@ -93,6 +92,36 @@ var nowDateUTC = function() {
     return (dateFormat);
 }
 
+/**
+ * Return a date in the format compatible to the database
+ * @param  date         Date object
+ * @return {string}     The date in a YYYY-MM-DD format
+ */
+function formatDate(date) {
+    var month = date.getMonth() + 1
+    if (month < 10) { month = "0" + month }
+    var day = date.getDate()
+    if (day < 10) { day = "0" + day }
+    var dateFormat = date.getFullYear() + '-' + month + '-' + day
+    return (dateFormat);
+}
+
+/**
+ * Return a date in the format compatible to the database
+ * @param  <none>
+ * @return {string}     The date in a YYYY-MM-DD format
+ */
+function dayOffset(sDate, tDate) {
+
+    date1 = new Date(sDate)
+    date2 = new Date(tDate)
+        // To calculate the time difference of two dates 
+    var Difference_In_Time = date1.getTime() - date2.getTime();
+
+    // To calculate the no. of days between two dates 
+    var Difference_In_Days = Difference_In_Time / (1000 * 3600 * 24);
+    return (Difference_In_Days)
+}
 
 /**
  * Return a date offset by days compared to today's date 
@@ -101,17 +130,9 @@ var nowDateUTC = function() {
  * @return {date}       The date offset in a YYYY-MM-DD format    
  */
 function dayChange(date, offset) {
-    var d = new Date()
-    year = date.substring(0, 4)
-    month = date.substring(5, 7)
-    day = date.substring(8, 10)
-    d.setFullYear(year, month, day)
-    d.setDate(d.getDate() + offset);
-    var month = d.getMonth()
-    if (month < 10) { month = "0" + month }
-    var day = d.getDate()
-    if (day < 10) { day = "0" + day }
-    var dateFormat = d.getFullYear() + '-' + month + '-' + day
+    var d = new Date(date)
+    var newDate = new Date(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate() + offset)
+    var dateFormat = formatDate(newDate)
     return (dateFormat)
 }
 
@@ -124,12 +145,15 @@ function validateUser() {
     }
 }
 
+/**
+ * Return a date in the format compatible to the database
+ * @param  <none>
+ * @return {string}     The date in a YYYY-MM-DD format
+ */
 function setMenu() {
-
     validateUser()
     var JSONProfile = getCookie("spProfile")
     objProfile = JSON.parse(JSONProfile)
-
     document.getElementById("resName").innerHTML = objProfile.RestaurantName
     document.getElementById("profile").innerHTML = "Profile: " + objProfile.PrefName
 }
