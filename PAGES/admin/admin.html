@@ -4,32 +4,41 @@
 
 <head>
     <title>Sweet Pickle - Admin</title>
-    <link rel="stylesheet" href="../../CSS/main.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="../../CSS/default.css">
 
-    <!--
-		<img src= "images/myImage.jpg">
-		-->
-    <script src="../../JS/main.js"></script>
+    <script src="../../JS/toolkit.js"></script>
+    <script src="../../JS/admin.js"></script>
 
 </head>
 
-<body>
-
-    <!-- Side navigation -->
-    <div class="sidenav">
-        <a href="status.html" target="iframeTasks">Site Status</a>
+<body onload="adminOnLoad()">
+    <!-- The sidebar -->
+    <div class="sidebar">
+        <p id="resName">Sweet Pickle</p>
         <hr>
-        <a href="provision.html" target="iframeTasks">Provision Site</a>
-        <a href="restaurants.html" target="iframeTasks">Restaurants</a>
+        <a href="../../main.html">Home</a>
+        <a class="active">Status</a>
+        <a href="provision.html">Provision</a>
+        <a href="restaurants.html">Restaurants</a>
     </div>
 
-    <!-- Page content -->
-    <!-- Main iFrame for task pages -->
-    <div class="main" style="display: inline;">
-        <!-- style="--aspect-ratio: 16/9;"> -->
-        <iframe src="status.html" name="iframeTasks" width="800px" height="800px" frameborder="0">
-        </iframe>
+    <!-- The breadcrumb menu -->
+    <ul class="breadcrumb">
+        <!--        
+            <li><a href="#">Home</a></li>
+            <li><a href="#">Pictures</a></li>
+            <li><a href="#">Summer 15</a></li>
+            -->
+        <li>Status</li>
+    </ul>
+    <!-- Content -->
+    <div class="content">
+        <div>
+            <p>Check API Connectivity: </p>
+            <button onclick="pingAPI()">Ping API</button>
+            <br>
+            <span id="response">... unable to connect to API...</span>
+        </div>
     </div>
 </body>
 

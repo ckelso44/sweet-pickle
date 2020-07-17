@@ -5,58 +5,79 @@
 <head>
     <title>Sweet Pickle - Restaurant Provisioning Page</title>
 
-    <link rel="stylesheet" href="CSS/provision.css">
+    <link rel="stylesheet" href="../../CSS/provision.css">
     <link rel="stylesheet" href="../../CSS/default.css">
 
     <script src="../../JS/toolkit.js"></script>
-    <script src="JS/provision.js"></script>
+    <script src="../../JS/provision.js"></script>
 
 </head>
 
-<body>
-    <div class="containerDiv">
-        <h1 class="containerDiv">Provision a new Restaurant</h1>
-        <form action="onSubmit">
-            <fieldset>
-                <div id="userDetailsDiv">
-                    <h2>User Details</h2>
-                    <span>
+<body onload="provisionOnLoad()">
+    <!-- The sidebar -->
+    <div class="sidebar">
+        <p id="resName">Sweet Pickle</p>
+        <hr>
+        <a href="../../main.html">Home</a>
+        <a href="admin.html">Status</a>
+        <a class="active">Provision</a>
+        <a href="restaurants.html">Restaurants</a>
+    </div>
+
+    <!-- The breadcrumb menu -->
+    <ul class="breadcrumb">
+        <!--        
+            <li><a href="#">Home</a></li>
+            <li><a href="#">Pictures</a></li>
+            <li><a href="#">Summer 15</a></li>
+            -->
+        <li>Provision</li>
+    </ul>
+    <!-- Content -->
+    <div class="content">
+        <div class="containerDiv">
+            <h1 class="containerDiv">Provision a new Restaurant</h1>
+            <form action="onSubmit">
+                <fieldset>
+                    <div id="userDetailsDiv">
+                        <h2>User Details</h2>
+                        <span>
                         <label>full name: 
                             <input type='text' id = 'fName' required placeholder="Patricia Mangr">
                         </label>
                     </span>
-                    <span>
+                        <span>
                         <label>preferred name: 
                             <input type='text' id = 'pName' placeholder="Patsy">
                         </label>
                     </span>
-                    <span>    
+                        <span>    
                         <label>email: 
                             <input type='text' id = 'email' required placeholder="patsy@MyEatery.xxx" value="test@example.com">
                         </label>
                     </span>
-                    <span>
+                        <span>
                         <label>password: 
                             <input type='text' id = 'password' required placeholder="SuperSecret#!84"> 
                         </label>
                     </span>
-                    <span>
+                        <span>
                         <label id="userProgress">Status: Not Generated</label>
                         <label> userID: 
                             <input type="text" id="userID" disabled oninput="onUserIDChange()">
                         </label>
                     </span>
-                </div>
+                    </div>
 
-                <div id="restaurantDiv">
-                    <h2>Restaurant Details</h2>
+                    <div id="restaurantDiv">
+                        <h2>Restaurant Details</h2>
 
-                    <span>
+                        <span>
                         <label>restaurant name: 
                             <input type='text' id = 'rName' required placeholder="My Eatery">
                         </label>
                     </span>
-                    <span>    
+                        <span>    
                         <label>country: 
                             <input list="countries" id= "country" name="country" required>
                             <datalist id="countries">
@@ -80,24 +101,24 @@
                             <input type='text' id = 'code' required>
                         </label>
                     </span>
-                    <span>
+                        <span>
                         <label id="restaurantProgress">Status: Not Generated</label>
                     <label> restaurantID: 
                         <input type="text" id="resID" disabled>
                     </label>
                 </span>
-                </div>
-                <div>
-                    <h1>Select to Provision Details</h1>
-                    <span class="buttonSpan">
+                    </div>
+                    <div>
+                        <h1>Select to Provision Details</h1>
+                        <span class="buttonSpan">
                         <input type="button" id="provision" value="Start Provision Process" onclick="provisionUser()">
                     </span>
-                    <p id="sumDetails">Details to follow...</p>
-                </div>
-            </fieldset>
-        </form>
+                        <p id="sumDetails">Details to follow...</p>
+                    </div>
+                </fieldset>
+            </form>
+        </div>
     </div>
-
 </body>
 
 <!-- The Modal -->

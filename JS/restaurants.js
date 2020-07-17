@@ -68,3 +68,7 @@ function loadList() {
     // Send request
     request.send()
 }
+
+function resOnLoad() {
+    loadList()
+}

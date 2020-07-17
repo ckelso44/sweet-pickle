@@ -34,3 +34,9 @@ function pingAPI() {
     // Send request
     request.send()
 }
+
+function adminOnLoad() {
+    // initialize the page and validate the user
+    //setMenu()
+    pingAPI()
+}
