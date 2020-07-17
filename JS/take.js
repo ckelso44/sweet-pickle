@@ -55,8 +55,7 @@ function newDailyTake() {
     request.onload = function() {
         // Begin accessing JSON data here
         var dtID = JSON.parse(this.response);
-        console.log(dtID);
-        loadTakeSheet();
+        loadTakeSheet("date", gDate);
     }
 
     request.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
@@ -477,14 +476,15 @@ function loadTakeSheet(type, value) {
                 //fill in the cells for the take values
                 for (var k = 0; k < headerList.length; k++) {
                     var cell = tr.insertCell(-1);
-                    if (k == 0) {
+                    tValue = take[headerList[k]]
+                    if (k == 0 || tValue === null || tValue === "") {
                         cell.className = "sumRow";
-                        cell.innerHTML = take[headerList[k]];
+                        cell.innerHTML = tValue;
                     } else {
                         cell.className = "sumValue";
                         sumStaffTakeCell = Number(document.getElementById(sumIDs[k]).innerHTML) + Number(take[headerList[k]])
                         document.getElementById(sumIDs[k]).innerHTML = sumStaffTakeCell.toFixed(2);
-                        cell.innerHTML = Number(take[headerList[k]]).toFixed(2);
+                        cell.innerHTML = Number(tValue).toFixed(2);
                     }
                 }
                 //update the status of the staff take

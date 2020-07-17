@@ -85,7 +85,6 @@ class DailyTake(Resource):
                 # for each take sheet
                 for take in tResult["Take"]: 
                     # load the stafftake id
-                    # print(take)
                     stID = take["StaffTakeID"]
                     # check if the stafftake Id exists in the stafftake dict
                     if stID in stDict:
@@ -94,33 +93,41 @@ class DailyTake(Resource):
                     else:
                         #If not, add it to the dictionary, set it's first value to be a pair of the id and add the take into the list value
                         stDict[stID] = [take]
+  
                     # as we're looping through the takes, also build the sumTakes list
                     payment = take["Payment"]
-                    #print(payment)
-                    #print(take)
-                    #print(sumsDict)
-                    
-                    #handle None types in data
                     takeExp = take["Expected"]
-                    if takeExp == None: 
-                        takeExp = 0
-                    
                     takeAct = take["Actual"]
-                    if takeAct == None:
-                        takeAct = 0
 
                     #build the list of payments first as an easily referencable dict
                     if payment in sumsDict:
+                    #handle None types in data
                         payDict = sumsDict[payment]
-                        newExp = takeExp + payDict["ExpSum"]
-                        newAct = takeAct + payDict["ActSum"]
+                        try: 
+                            newExp = takeExp + payDict["ExpSum"]
+                        except: 
+                            takeExp = 0
+                            newExp = takeExp + payDict["ExpSum"]
+                        try: 
+                            newAct = takeAct + payDict["ActSum"]
+                        except: 
+                            takeAct = 0
+                            newAct = takeAct + payDict["ActSum"]
                         diff = newExp - newAct
+                        
                         newCount = payDict["Count"] + 1
                         newPayDict = {"ExpSum": newExp, "ActSum": newAct, "DiffSum": diff, "Count": newCount}
                         sumsDict[payment] = newPayDict
 
                     else: 
-                        diff = takeExp - takeAct 
+                        try: 
+                            diff = takeExp - takeAct 
+                        except: 
+                            if takeExp == None or takeExp == "":
+                                takeExp = 0
+                            if takeAct == None or takeAct == "":
+                                takeAct = 0 
+                            diff = takeExp - takeAct
                         payDict = {"ExpSum": takeExp, "ActSum": takeAct, "DiffSum": diff, "Count": 1}
                         sumsDict[payment] = payDict
                 
@@ -133,23 +140,18 @@ class DailyTake(Resource):
                     # print(sumDict)
                     sumTakes["SumTakes"].append(sumDict)
 
-                # print(sumTakes)
-
                 # loop though the staff takes, add the take sheets
                 for sTake in stResult["StaffTake"]:
-                    # print(sTake)
                     sTakeID = sTake["StaffTakeID"]
                     takeList = stDict[sTakeID] 
                     sTake["Takes"] = takeList
 
                 Li.append("Monday")
-                # print(stDict)
                 Li.append(stResult["StaffTake"])
                 Li.append(sumTakes["SumTakes"])
                 i=tuple(Li)
                 dailyTakes.append(i)
-                # print(stResult)
-
+     
             result = {'DailyTake': [dict(zip(tuple (query.keys()) ,i)) for i in dailyTakes]}
             conn.close
 
@@ -515,7 +517,7 @@ class DailyTakeByDate(Resource):
             else:
                 return jsonify("Error - Dates were not specified")
             # Set the basic response query
-            sqlReq = 'SELECT * FROM DailyTakeSum where Date > ? AND Date <= ? ORDER BY Date'
+            sqlReq = 'SELECT * FROM DailyTakeSum where Date >= ? AND Date <= ? ORDER BY Date'
 
             values = [startDate, endDate]
             query = conn.execute(sqlReq, values) # This line performs query and returns json result

@@ -1,4 +1,38 @@
 /* JS page for the take sheet home page */
+// chart functions
+
+google.charts.load('current', { 'packages': ['corechart'] });
+google.charts.setOnLoadCallback(drawChart(null));
+
+// Draw the chart and set the chart values
+function drawChart(chartData) {
+    var sampData = [
+        ['Day', 'Actual Take'],
+        ['Monday', 1234],
+        ['Tuesday', 1345.56],
+        ['Wednesday', 1145.43],
+        ['Thursday', 545.23],
+        ['Friday', 1476.23],
+        ['Saturday', null],
+        ['Sunday', null]
+    ];
+
+    if (chartData != null) {
+        var data = google.visualization.arrayToDataTable(chartData)
+
+        // Optional; add a title and set the width and height of the chart
+        var options = {
+            title: 'Weekly Take',
+            legend: { position: 'bottom' }
+        };
+
+        var chart = new google.visualization.LineChart(document.getElementById('takeChart'));
+        chart.draw(data, options);
+    }
+}
+
+
+
 
 //navigation functions for the week view
 // navigate to the previous week
@@ -113,7 +147,7 @@ function loadWeekTakes(stDate, enDate) {
     startDate = formatDate(stDate)
     endDate = formatDate(enDate)
     var resURL = gURL + '/dailytake/bydate?resID=' + getResID() + '&startdate=' + startDate + '&enddate=' + endDate;
-    console.log(resURL);
+    // console.log(resURL);
 
     request.open('GET', resURL, true) // Open a new connection, using the GET request on the URL endpoint
 
@@ -122,18 +156,20 @@ function loadWeekTakes(stDate, enDate) {
         var days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
         var request = JSON.parse(this.response);
         dtData = request.DailyTakes;
-        console.log(dtData);
+        // console.log(dtData);
         var cardDate = startDate
         var todayDate = nowDate()
+        var chartData = new Array()
+        var axis = ['Day', 'Actual Take']
+        chartData.push(axis)
             // go through each day of the week and determine which card to build
         for (i = 0; i < 7; i++) {
             var found = false
-
-
+            var dataPair = [days[i]]
             for (j = 0; j < dtData.length; j++) {
                 if (dtData[j].Date == cardDate) {
                     found = true
-                    console.log(cardDate)
+                        // console.log(cardDate)
                     if (cardDate == todayDate) {
                         addCard(dtData[j], "In-progress", days[i])
                     } else if (cardDate < todayDate) {
@@ -145,13 +181,19 @@ function loadWeekTakes(stDate, enDate) {
                     } else {
                         addCard(dtData[j], "Ready", days[i])
                     }
+                    dataPair.push(Number(dtData[j].SumActual))
+                        //console.log(dataPair)
                 }
             }
             if (found == false) {
                 noCard(cardDate, days[i])
+                dataPair.push(null)
             }
+            chartData.push(dataPair)
             cardDate = dayChange(cardDate, 1)
         }
+        // Display the chart inside the <div> element with id="takeChart"
+        drawChart(chartData)
     }
 
     // send the request
@@ -171,8 +213,7 @@ function takeHomeOnLoad() {
         gDate = nowDate()
     }
     offset = dayOffset(gDate, nowDate())
-    console.log("URL date= " + pageParams["date"] + ", gDate = " + gDate)
-    console.log("offset= " + offset)
+        //console.log("URL date= " + pageParams["date"] + ", gDate = " + gDate + ", offset= " + offset)
 
     // check what day of the week it is to offset the start and end dates
     var dayOfWeek = new Date(gDate)
@@ -198,5 +239,4 @@ function takeHomeOnLoad() {
 
 
     loadWeekTakes(sDate, eDate)
-
 }
