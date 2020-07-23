@@ -12,24 +12,24 @@
 </head>
 
 <body>
-    <div>
+    <div class="default">
         <h2>Login to Sweet Pickle</h2>
         <form>
             <fieldset>
                 <p class="errorMsg" id="loginErr" hidden>Your email and password do not match, please try again or register as a new user.</p>
-                <span><label>email: 
+                <span><label class="basicLabel">email: 
                         <input type='text' id = 'email' required>
                     </label>
                 </span>
                 <span>
-                    <label>password: 
+                    <label class="basicLabel">password: 
                         <input type='password' id = 'password' required>
                     </label>
                 </span>
                 <span class="buttonSpan">
                     <input type="button" id="login" value="Login" onclick="loginUser()">
                 </span>
-                <p>Forgot Password? No problem,<a href="forgotPassword.html">click here</a> to reset your password.</p>
+                <p>Forgot Password? No problem, <a href="forgotPassword.html">click here</a> to reset your password.</p>
 
             </fieldset>
         </form>

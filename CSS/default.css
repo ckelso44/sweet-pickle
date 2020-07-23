@@ -74,6 +74,10 @@ label {
     padding: 5px;
 }
 
+.basicLabel {
+    color: var(--Colour-0);
+}
+
 fieldset {
     border-style: none;
 }
@@ -409,6 +413,7 @@ ul.breadcrumb li a:hover {
 
 input[type=text],
 input[type=number],
+input[type=password],
 select,
 textarea {
     width: 100%;
