@@ -155,5 +155,5 @@ function setMenu() {
     var JSONProfile = getCookie("spProfile")
     objProfile = JSON.parse(JSONProfile)
     document.getElementById("resName").innerHTML = objProfile.RestaurantName
-    document.getElementById("profile").innerHTML = "Profile: " + objProfile.PrefName
+    document.getElementById("profile").innerHTML = "Profile: " + objProfile.FullName
 }

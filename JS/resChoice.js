@@ -85,6 +85,7 @@ function getEmployeeRecord(UserID, Name) {
 function resChoiceOnLoad() {
 
     var JSONProfile = getCookie("spProfile")
+    console.log(JSONProfile)
     objProfile = JSON.parse(JSONProfile)
 
     var activeUserID = objProfile["UserID"]

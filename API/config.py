@@ -1,4 +1,4 @@
 def comSettings():
-    return { "dbFilePath" : "sqlite:///c:\\Projects\\SweetPickle\\DATA\\",
+    return { "dbFilePath" : "sqlite:///c:\\Projects\\DATA\\",
     "login" : "None",
     "pass" : "None"}

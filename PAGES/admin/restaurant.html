@@ -1,0 +1,106 @@
+<!doctype html>
+
+<html>
+
+<head>
+    <title>Res Pro - Restaurant Details</title>
+
+    <link rel="stylesheet" href="../../css/default.css">
+
+    <script src="../../JS/toolkit.js"></script>
+    <script src="../../JS/restaurant.js"></script>
+
+</head>
+
+<body onload="resOnLoad()">
+    <!-- The sidebar -->
+    <div class="sidebar">
+        <p id="resName">Sweet Pickle</p>
+        <hr>
+        <a href="admin.html">Status</a>
+        <a href="restaurants.html" class="active">Restaurants</a>
+        <a href="users.html">Users</a>
+    </div>
+
+    <!-- The breadcrumb menu -->
+    <ul class="breadcrumb">
+        <!--        
+            <li><a href="#">Home</a></li>
+            <li><a href="#">Pictures</a></li>
+            <li><a href="#">Summer 15</a></li>
+            -->
+        <li><a href="restaurants.html">Restaurants</a></li>
+        <li>New Restaurant</li>
+    </ul>
+    <!-- Content -->
+    <div class="content">
+        <div class="containerDiv">
+            <h1 class="containerDiv">Provision a new Restaurant</h1>
+            <form action="onSubmit">
+                <fieldset>
+                    <div id="restaurantDiv">
+                        <h2>Restaurant Details</h2>
+                        <span>
+                            <label>restaurant name: 
+                                <input type='text' id = 'rName' required placeholder="My Eatery">
+                            </label>
+                        </span>
+                        <br>
+                        <span>    
+                            <label>address (Street): 
+                                <input type='text' id = 'address' required placeholder="123 Main Street">
+                            </label>
+                            <label>address (Unit Number): 
+                                <input type='text' id = 'address2' requiredplaceholder="Unit 123">
+                            </label>
+                            <label>city: 
+                                <input type='text' id = 'city' required placeholder="Anytown">
+                            </label>
+                            <label>region: 
+                                <input type='text' id = 'region' required placeholder="BC">
+                            </label>
+                            <label>country: 
+                                <input list="countries" id= "country" name="country" required placeholder="-- Select One --">
+                                <datalist id="countries">
+                                    <option value="Canada"></option>
+                                    <option value="United States"></option>
+                                </datalist>
+                            </label>
+                            <label>code (postal or zip): 
+                                <input type='text' id = 'code' required placeholder="A0A 0A0 or 12345">
+                            </label>
+                        </span>
+                    </div>
+                    <div>
+                        <span class="buttonSpan">
+                            <input type="button" id="provision" value="Start Provision Process" onclick="provisionRes()">
+                        </span>
+                        <p id="sumDetails">Details to follow...</p>
+                    </div>
+                </fieldset>
+            </form>
+        </div>
+    </div>
+</body>
+
+<!-- The Modal -->
+<div id="myModal" class="modal">
+
+    <!-- Modal content -->
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2 id="mHeader">Modal Header</h2>
+        </div>
+        <div class="modal-body">
+            <p id="mBody">Some text in the Modal Body</p>
+            <p id="mDetails"></p>
+        </div>
+        <div class="modal-footer">
+            <span class="mButton" id="mButtonConfirm">Confirm</span>
+            <span class="mButton" id="mButtonCancel">Cancel</span>
+        </div>
+    </div>
+
+</div>
+
+</html>

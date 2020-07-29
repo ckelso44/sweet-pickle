@@ -334,13 +334,13 @@ class StaffTake(Resource):
                 # send the update for the daily take
                 patchQuery = '''UPDATE StaffTake
                     SET DailyTakeID = ?,
-                        EmployeeID = ?, 
+                        StaffID = ?, 
                         Shift = ?,
                         ModDate = ?,
                         ModUser = ?
                     WHERE StaffTakeID = ?'''
                 patchValues = (aJSON["DailyTakeID"], 
-                    aJSON["EmployeeID"], 
+                    aJSON["StaffID"], 
                     aJSON["Shift"], 
                     nowDate,
                     aJSON["UserID"], 
@@ -368,7 +368,7 @@ class StaffTake(Resource):
                 conn = db.connect()
                 postQuery = '''INSERT INTO StaffTake (
                         DailyTakeID,
-                        EmployeeID,
+                        StaffID,
                         Shift,
                         CreateDate,
                         CreateUser,
@@ -376,7 +376,7 @@ class StaffTake(Resource):
                         ModUser
                     ) VALUES (?,?,?,?,?,?,?)'''
                 postValues = (aJSON["DailyTakeID"], 
-                    aJSON["EmployeeID"],
+                    aJSON["StaffID"],
                     aJSON["Shift"], 
                     nowDate, 
                     aJSON["UserID"], 

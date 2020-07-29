@@ -26,7 +26,7 @@ function loginUser() {
 
         if (jsonResponse != "False") {
             // set cookie to allow for employee records to be retrieved
-            var profileObj = { "PrefName": jsonResponse["PrefName"], "UserID": jsonResponse["UserID"].toString() }
+            var profileObj = { "FullName": jsonResponse["FullName"], "UserID": jsonResponse["UserID"].toString() }
             setCookie("spProfile", JSON.stringify(profileObj), 100)
 
             location.replace("resChoice.html");

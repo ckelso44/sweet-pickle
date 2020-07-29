@@ -7,38 +7,40 @@ from datetime import datetime
 # local files
 from config import comSettings
 
-# PURPOSE - create a resource for retrieving the daily take sheet
-class Employees(Resource):
+# PURPOSE - create a resource for staff members at the restaurant
+class Staff(Resource):
 
     def get(self):
-        print("All Employees Requested")
+        print("All Staff Requested")
         reqDict = request.args 
         
         if "resID" in request.args:
             resID = request.args["resID"]
-            databaseConnection = 'sqlite:///c:\\Projects\\SweetPickle\\DATA\\' + resID + '.db'
+            dbConfig = comSettings()
+            databaseConnection = dbConfig["dbFilePath"] + resID + '.db'
             db = create_engine(databaseConnection)
             conn = db.connect() 
-            query = conn.execute("SELECT * FROM Employee")
-            result = {'Employees': [dict(zip(tuple (query.keys()) ,i)) for i in query.cursor]}
+            query = conn.execute("SELECT * FROM Staff")
+            result = {'Staff': [dict(zip(tuple (query.keys()) ,i)) for i in query.cursor]}
             conn.close
             return jsonify(result)
         else:
             return jsonify("invalid request - no resid found")
 
-class ActiveEmployees(Resource):
+class ActiveStaff(Resource):
 
     def get(self):
-        print("Active Employees Requested")
+        print("Active Staff Requested")
         reqDict = request.args 
         
         if "resID" in request.args:
             resID = request.args["resID"]
-            databaseConnection = 'sqlite:///c:\\Projects\\SweetPickle\\DATA\\' + resID + '.db'
+            dbConfig = comSettings()
+            databaseConnection = dbConfig["dbFilePath"] + resID + '.db'
             db = create_engine(databaseConnection)
             conn = db.connect() 
-            query = conn.execute("SELECT EmployeeID, FullName FROM Employee WHERE Active = ?","True")
-            result = {'Employees': [dict(zip(tuple (query.keys()) ,i)) for i in query.cursor]}
+            query = conn.execute("SELECT StaffID, FullName FROM Staff WHERE Active = ?","True")
+            result = {'Staff': [dict(zip(tuple (query.keys()) ,i)) for i in query.cursor]}
             conn.close
             return jsonify(result)
         else:
