@@ -83,14 +83,33 @@ class Employee(Resource):
                     ModUser 
                 ) VALUES (?,?,?,?,?,?,?)'''
             postValues = (aJSON["UserID"], 
-                aJSON["RestaurantID"], 1, nowDate, 1, nowDate, 1) 
+                aJSON["RestaurantID"], "True", nowDate, 1, nowDate, 1) 
             postResult = conn.execute(postQuery, postValues)
             conn.close
             empID = postResult.lastrowid
 
             # now create a Staff Record
-            
-            return jsonify(empID)
+            db_connect = create_engine(dbConfig["dbFilePath"] + aJSON["RestaurantID"] + '.db')
+            conn = db_connect.connect()
+            postQuery = '''INSERT INTO Staff (
+                    UserID,
+                    FullName,
+                    PrefName,
+                    Status, 
+                    Active,
+                    CreateDate,
+                    CreateUser,
+                    ModDate,
+                    ModUser 
+                ) VALUES (?,?,?,?,?,?,?,?,?)'''
+            postValues = (aJSON["UserID"], 
+                aJSON["FullName"], aJSON["PrefName"], "New", "True", nowDate, 1, nowDate, 1) 
+            postResult = conn.execute(postQuery, postValues)
+            conn.close
+            staffID = postResult.lastrowid
+            empRec = {"EmpID": empID,"StaffID": staffID}
+
+            return jsonify(empRec)
         
         # if there is a matching email found, then raise the error 
         else:
@@ -208,7 +227,7 @@ class Restaurant(Resource):
                 aJSON["LocRegion"], 
                 aJSON["LocCountry"], 
                 aJSON["LocCode"], 
-                "New", 1, nowDate, 1, nowDate, 1) 
+                "New", "True", nowDate, 1, nowDate, 1) 
             postResult = conn.execute(postQuery, postValues)
             conn.close
             resID = postResult.lastrowid
@@ -328,7 +347,7 @@ class User(Resource):
                 ModDate,
                 ModUser 
                 ) VALUES (?,?,?,?,?,?,?,?,?,?)'''
-            postValues = (aJSON["FullName"], aJSON["UserName"], aJSON["Email"], passWord, nowDate, 1, nowDate, 1, nowDate, 1) 
+            postValues = (aJSON["FullName"], aJSON["UserName"], aJSON["Email"], passWord, nowDate, "True", nowDate, 1, nowDate, 1) 
             postResult = conn.execute(postQuery, postValues)
             conn.close
             userID = postResult.lastrowid
@@ -376,7 +395,7 @@ class Login(Resource):
 
         # ++ validate email and password combination
         conn = db_connect.connect()
-        getResult = conn.execute('SELECT UserID, FullName from Users WHERE Active = 1 AND Email = ? AND Password = ?', (aJSON["email"], password)) # Search for other users with this email
+        getResult = conn.execute('SELECT UserID, FullName from Users WHERE Active = ? AND Email = ? AND Password = ?', ("True", aJSON["email"], password)) # Search for other users with this email
         row = getResult.fetchone()
         print(row)
         conn.close

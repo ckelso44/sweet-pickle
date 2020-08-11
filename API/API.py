@@ -51,7 +51,7 @@ class Ping(Resource):
 api.add_resource(Login, '/login', methods=['PATCH'])
 api.add_resource(User, '/user', methods=['GET','POST','PATCH'])
 api.add_resource(Employee, '/employee', methods=['GET', 'POST'])
-api.add_resource(Staff, '/staff', methods=['GET', 'POST'])
+api.add_resource(Staff, '/staff', methods=['GET', 'PATCH', 'POST'])
 api.add_resource(ActiveStaff, '/staff/active', methods=['GET'])
 api.add_resource(DailyTake, '/dailytake', methods=['GET', 'PATCH', 'POST'])
 api.add_resource(StaffTake, '/dailytake/stafftake', methods=['GET', 'POST', 'PATCH'])

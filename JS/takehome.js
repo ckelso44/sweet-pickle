@@ -203,7 +203,7 @@ function loadWeekTakes(stDate, enDate) {
 function takeHomeOnLoad() {
 
     // initialize the page and validate the user
-    setMenu()
+    setMenu("Take Sheets", "Take")
 
     //grab the date from the URL. If no date, assume today
     var pageParams = getParams(window.location.href)

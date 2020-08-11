@@ -409,7 +409,7 @@ function deleteStaffTake() {
 // prepare the form when it loads
 function stOnLoad() {
     // initialize the page and validate the user
-    setMenu()
+    setMenu("Take Sheets", "Take")
 
 
     // check for a ID's on the requestor URL

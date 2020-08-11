@@ -14,13 +14,7 @@
 
 <body onload="resOnLoad()">
     <!-- The sidebar -->
-    <div class="sidebar">
-        <p id="resName">Sweet Pickle</p>
-        <hr>
-        <a href="admin.html">Status</a>
-        <a href="restaurants.html" class="active">Restaurants</a>
-        <a href="users.html">Users</a>
-    </div>
+    <div class="sidebar" id="navMenu"></div>
 
     <!-- The breadcrumb menu -->
     <ul class="breadcrumb">
@@ -29,78 +23,63 @@
             <li><a href="#">Pictures</a></li>
             <li><a href="#">Summer 15</a></li>
             -->
-        <li><a href="restaurants.html">Restaurants</a></li>
-        <li>New Restaurant</li>
+        <li>My Restaurant</li>
     </ul>
     <!-- Content -->
     <div class="content">
         <div class="containerDiv">
-            <h1 class="containerDiv">Provision a new Restaurant</h1>
             <form action="onSubmit">
                 <fieldset>
                     <div id="restaurantDiv">
                         <h2>Restaurant Details</h2>
                         <span>
                             <label>restaurant name: 
-                                <input type='text' id = 'rName' required placeholder="My Eatery">
+                                <input type='text' id = 'rName' disabled>
+                            </label>
+                        </span>
+                        <span>
+                            <label>restaurant id: 
+                                <input type='text' id = 'rID' disabled>
                             </label>
                         </span>
                         <br>
                         <span>    
                             <label>address (Street): 
-                                <input type='text' id = 'address' required placeholder="123 Main Street">
+                                <input type='text' id = 'address' required placeholder="123 Main Street" onchange="enableSave()">
                             </label>
                             <label>address (Unit Number): 
-                                <input type='text' id = 'address2' requiredplaceholder="Unit 123">
+                                <input type='text' id = 'address2' requiredplaceholder="Unit 123" onchange="enableSave()">
                             </label>
                             <label>city: 
-                                <input type='text' id = 'city' required placeholder="Anytown">
+                                <input type='text' id = 'city' required placeholder="Anytown" onchange="enableSave()">
                             </label>
                             <label>region: 
-                                <input type='text' id = 'region' required placeholder="BC">
+                                <input type='text' id = 'region' required placeholder="BC" onchange="enableSave()">
                             </label>
                             <label>country: 
-                                <input list="countries" id= "country" name="country" required placeholder="-- Select One --">
+                                <input list="countries" id= "country" name="country" required placeholder="-- Select One --" onchange="enableSave()">
                                 <datalist id="countries">
                                     <option value="Canada"></option>
                                     <option value="United States"></option>
                                 </datalist>
                             </label>
                             <label>code (postal or zip): 
-                                <input type='text' id = 'code' required placeholder="A0A 0A0 or 12345">
+                                <input type='text' id = 'code' required placeholder="A0A 0A0 or 12345" onchange="enableSave()">
                             </label>
                         </span>
                     </div>
                     <div>
                         <span class="buttonSpan">
-                            <input type="button" id="provision" value="Start Provision Process" onclick="provisionRes()">
+                            <input type="button" class="disabledButton" id="saveBtn" value="Save Details" onclick="saveRes()" disabled>
                         </span>
-                        <p id="sumDetails">Details to follow...</p>
+                        <span class="buttonSpan">
+                            <input type="button" class="disabledButton" id="cancelBtn" value="Discard Changes" onclick="cancelRes()" disabled>
+                        </span>
                     </div>
                 </fieldset>
             </form>
         </div>
     </div>
 </body>
-
-<!-- The Modal -->
-<div id="myModal" class="modal">
-
-    <!-- Modal content -->
-    <div class="modal-content">
-        <div class="modal-header">
-            <h2 id="mHeader">Modal Header</h2>
-        </div>
-        <div class="modal-body">
-            <p id="mBody">Some text in the Modal Body</p>
-            <p id="mDetails"></p>
-        </div>
-        <div class="modal-footer">
-            <span class="mButton" id="mButtonConfirm">Confirm</span>
-            <span class="mButton" id="mButtonCancel">Cancel</span>
-        </div>
-    </div>
-
-</div>
 
 </html>

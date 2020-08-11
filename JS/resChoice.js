@@ -25,7 +25,7 @@ function getEmployeeRecord(UserID, Name) {
 
     // request for all employee profiles with that user ID
     var request = new XMLHttpRequest() // Create a request variable and assign a new XMLHttpRequest object to it.
-    appURL = gURL + '/employee?UserID=' + UserID + '&Active=1';
+    appURL = gURL + '/employee?UserID=' + UserID + '&Active=True';
 
     request.open('GET', appURL, true) // Open a new connection, using the GET request on the URL endpoint
 

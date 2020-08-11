@@ -1,0 +1,171 @@
+<!doctype html>
+
+<html>
+
+<head>
+    <title>Res Pro - Staff Member</title>
+
+    <link rel="stylesheet" href="../../css/default.css">
+
+    <script src="../../JS/toolkit.js"></script>
+    <script src="../../JS/staff.js"></script>
+
+</head>
+
+<body onload="staffMemberOnLoad()">
+    <!-- The sidebar -->
+    <div class="sidebar" id="navMenu"></div>
+
+    <!-- The breadcrumb menu -->
+    <ul class="breadcrumb">
+        <!--        
+            <li><a href="#">Home</a></li>
+            <li><a href="#">Pictures</a></li>
+            <li><a href="#">Summer 15</a></li>
+            -->
+
+        <li><a href="staff.html">All Staff</a></li>
+        <li>My Restaurant</li>
+    </ul>
+    <!-- Content -->
+    <div class="content">
+        <div class="containerDiv">
+            <form action="onSubmit">
+                <fieldset>
+                    <div id="restaurantDiv">
+                        <h2>Staff Member Details</h2>
+                        <span>
+                            <label>full name: 
+                                <input type='text' id = 'name' onchange="enableSave()">
+                            </label>
+                        </span>
+                        <span>
+                            <label>user id: 
+                                <input type='text' id = 'userID' disabled>
+                            </label>
+                        </span>
+                        <span class="shortButton" id="editLoginSpan">
+                            <input type="button" class="activeButton" id="editLogin" value="Edit Login" onclick="editLogin()">
+                        </span>
+                        <br>
+                        <span>    
+                            <label>preferred name: 
+                                <input type='text' id = 'pName' onchange="enableSave()">
+                            </label>
+                            <!-- status section -->
+                            <div > <!--class="formRow"-->
+                                <div > <!--class="formColumnLabel"-->
+                                    <label for="status">status:</label>
+                                </div>
+                                <div > <!--class="formColumnValue"-->
+                                    <div class="selectList">
+                                        <select id="status" name="status">
+                                            <option value="New">New</option>
+                                            <option value="Existing">Existing</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <label>active: 
+                                <input type='checkbox' id = 'active' onchange="enableSave()" checked>
+                            </label>
+
+                            <h2>Permissions</h3>
+                            <h3>Take Sheets -<I> Coming soon!</I></h3>
+                        </span>
+                    </div>
+                    <div>
+                        <span class="buttonSpan">
+                            <input type="button" class="disabledButton" id="saveBtn" value="Save Details" onclick="saveRes()" disabled>
+                        </span>
+                        <span class="buttonSpan">
+                            <input type="button" class="disabledButton" id="cancelBtn" value="Discard Changes" onclick="cancelRes()" disabled>
+                        </span>
+                        <span class="buttonSpan">
+                            <input type="button" class="activeButton" id="testBtn" value="Test Post" onclick="testPost()">
+                        </span>
+                    </div>
+                </fieldset>
+            </form>
+        </div>
+
+        <!-- Modal forms-->
+        <div id="newLoginModal" class="modal">
+            <!-- Modal content -->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 class="mHeader" id="ntHeader">Need a login?</h2>
+                </div>
+                <div class="modal-body">
+                    <p id="newTaskMsg">Would you like this staff member to have a login?</p>
+                    <ul>
+                        <li><b>Yes</b> - This member will be able to login and edit items based on their permissions</li>
+                        <li><b>No</b> - This staff member will only be used for reporting purposes</li>
+                        <li><b>Cancel</b> - you can go back and make additional changes</li>
+                    </ul>
+                </div>
+                <div class="modal-footer">
+                    <div class="mButton" id="mYesBtn">Yes - Make a login</div>
+                    <div class="mButton" id="mNoBtn">No - Just for reporting</div>
+                    <div class="mButtonCancel" id="mLoginCancelBtn">Cancel and return</div>
+                </div>
+            </div>
+        </div>
+
+        <div id="createUserModal" class="modal">
+            <!-- Modal content -->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 class="mHeader">Create Login</h2>
+                </div>
+                <div class="modal-body">
+                    <p id="newMsg">To create a login, please enter either an email or login name </p>
+                    <div class="formRow">
+                        <div class="formColumnLabel">
+                            <label>email: </label>
+                        </div>
+                        <div class="formColumnValue">
+                            <input type='text' id='userEmail' onclick="clickEmail()" autocomplete="off" placeholder="abc@example.com">
+                        </div>
+                    </div>
+                    <div class="formRow">
+                        <div class="formColumnLabel">
+                            <label>user name: </label>
+                        </div>
+                        <div class="formColumnValue">
+                            <input type='text' id='userName' onclick="clickUser()" autocomplete="off" placeholder="123-ABC">
+                        </div>
+                    </div>
+                    <div class="formRow">
+                        <div class="formColumnLabel">
+                            <label>password: </label>
+                        </div>
+                        <div class="formColumnValue">
+                            <input type='password' id='userPassword' autocomplete="new-password">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <div class="mButton" id="createLoginBtn">Create Login</div>
+                    <div class="mButtonCancel" id="cancelLoginBtn">Cancel</div>
+                </div>
+            </div>
+        </div>
+
+        <div id="msgModal" class="modal">
+            <!-- Modal content -->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <p id="statusMsg">Creating user </p>
+                </div>
+                <div class="modal-footer" id="mFooterDiv" hidden>
+                    <div class="mButton" id="OKBtn">OK!</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- content-->
+</body>
+
+</html>
