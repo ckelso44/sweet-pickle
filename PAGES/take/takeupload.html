@@ -1,0 +1,47 @@
+<!doctype html>
+
+<html>
+
+<head>
+    <title>Sweet Pickle - Facts Page</title>
+    <link rel="stylesheet" href="../../CSS/default.css">
+    <link rel="stylesheet" href="../../CSS/upload.css">
+
+    <script src="../../JS/toolkit.js"></script>
+    <script src="../../JS/upload.js"></script>
+</head>
+
+<body onload="uploadOnLoad()">
+    <!-- The sidebar -->
+    <div class="sidebar" id="navMenu"></div>
+
+    <!-- The breadcrumb menu -->
+    <ul class="breadcrumb">
+        <li>Upload Take Sheet</li>
+    </ul>
+
+    <!-- Content -->
+
+    <div class="content">
+        <label for="myfile">Select a file:</label>
+        <input type="file" id="myfile" name="myfile">
+        <button type="button" onclick="uploadFile()">Submit File</button>
+
+        <!-- Dropzone - https://gist.github.com/MichaelCurrie/19394abc19abd0de4473b595c0e37a3a -->
+        <div id="dropzone">
+            <h1 id="title">Let's try some drag and drop uploading!</h1>
+
+            <div id="dropzone_element" class="dropzone">
+                Drop files here to upload
+            </div>
+
+            <div id="upload_results_element"></div>
+
+        </div>
+    </div>
+
+
+    <!-- content-->
+</body>
+
+</html>

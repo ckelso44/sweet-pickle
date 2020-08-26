@@ -323,20 +323,24 @@ class User(Resource):
 
         dbConfig = comSettings() 
         db_connect = create_engine(dbConfig["dbFilePath"] + 'main.db')
+ 
+        row = None # ititialize this to None, if a dup email is found it will be populated
+        
+        if aJSON["Email"] != None and aJSON["Email"] != "" :
         # ++ validate email is unique
-        conn = db_connect.connect()
-        postResult = conn.execute('SELECT UserID from Users WHERE Email =?', aJSON["Email"]) # Search for other users with this email
-        row = postResult.fetchone()
+            conn = db_connect.connect()
+            postResult = conn.execute('SELECT UserID from Users WHERE Email =?', aJSON["Email"]) # Search for other users with this email
+            conn.close
+            row = postResult.fetchone()
 
-        # if no record with the same email is found, create the user
-        if row is None:
+        # if no record with the same email is found, or if they are using a User Namecreate the user
+        if row is None or (aJSON["UserName"] != None and aJSON["UserName"] != ""):
             nowDate = datetime.now()
             passWord = aJSON["Password"] #change this to be encrypted
 
             #create the User
             conn = db_connect.connect()
             postQuery = '''INSERT INTO Users (
-                FullName, 
                 UserName, 
                 Email, 
                 Password, 
@@ -346,8 +350,8 @@ class User(Resource):
                 CreateUser,
                 ModDate,
                 ModUser 
-                ) VALUES (?,?,?,?,?,?,?,?,?,?)'''
-            postValues = (aJSON["FullName"], aJSON["UserName"], aJSON["Email"], passWord, nowDate, "True", nowDate, 1, nowDate, 1) 
+                ) VALUES (?,?,?,?,?,?,?,?,?)'''
+            postValues = (aJSON["UserName"], aJSON["Email"], passWord, nowDate, "True", nowDate, 1, nowDate, 1) 
             postResult = conn.execute(postQuery, postValues)
             conn.close
             userID = postResult.lastrowid
@@ -385,38 +389,105 @@ class Login(Resource):
     #  Processes - upon successful validation, sets last login to now
     #  Returns - UserID, UserName
     def patch(self):
-        print("Post Login Requested")
-        aJSON = request.get_json(force=True)
+        print("Patch Login Requested")
+        reqDict = dict(request.args) 
+        
+        result = {"success": False, "value": None, "message": "login not attempted"}
 
-        password = aJSON["password"] # <-- add decryption to this
-        dbConfig = comSettings() 
-        print("Connecting to database")
-        db_connect = create_engine(dbConfig["dbFilePath"] + 'main.db')
+        if "type" in reqDict:
 
-        # ++ validate email and password combination
-        conn = db_connect.connect()
-        getResult = conn.execute('SELECT UserID, FullName from Users WHERE Active = ? AND Email = ? AND Password = ?', ("True", aJSON["email"], password)) # Search for other users with this email
-        row = getResult.fetchone()
-        print(row)
-        conn.close
-        # if no record with the same email is found, send the error
-        if row is None:
-            return jsonify("False")
-        else:
-            #update the Users last login
-            lastLogin = datetime.now()
-            #lastLogin = "2020-04-03"
-            print(lastLogin)
-            conn = db_connect.connect()
-            sql = '''UPDATE Users 
-                SET LastLogin = ? 
-                WHERE UserID = ?'''
-            aValues = (lastLogin, row[0])
-            conn.execute(sql, aValues) 
-            conn.close
-            result = {"UserID" : row[0], "FullName": row[1]}
-            #Send back the users details for use with the application
+            loginType = reqDict["type"]
+            if loginType == "email":     
+                aJSON = request.get_json(force=True)
+
+                password = aJSON["password"] # <-- add decryption to this
+                dbConfig = comSettings() 
+                print("Connecting to database")
+                db_connect = create_engine(dbConfig["dbFilePath"] + 'main.db')
+
+                # ++ validate email and password combination
+                conn = db_connect.connect()
+                getResult = conn.execute('SELECT UserID, FullName from Users WHERE Active = ? AND Email = ? AND Password = ?', ("True", aJSON["email"], password)) # Search for other users with this email
+                row = getResult.fetchone()
+                print(row)
+                conn.close
+                # if no record with the same email is found, send the error
+                if row is None:
+                    result["message"] = "Unable to find an email with that password, please try again"
+                    return jsonify("result")
+                else:
+                    #update the Users last login
+                    lastLogin = datetime.now()
+                    #lastLogin = "2020-04-03"
+                    print(lastLogin)
+                    conn = db_connect.connect()
+                    sql = '''UPDATE Users 
+                        SET LastLogin = ? 
+                        WHERE UserID = ?'''
+                    aValues = (lastLogin, row[0])
+                    conn.execute(sql, aValues) 
+                    conn.close
+                    result["success"] = True
+                    result["value"] = {"UserID" : row[0]}
+                    result["message"] = "Successfully logged in with that email"
+                    #Send back the users details for use with the application
+                    return jsonify(result)
+
+            elif loginType == "user":
+                aJSON = request.get_json(force=True)
+
+                dbConfig = comSettings() 
+                print("Connecting to database")
+                db_connect = create_engine(dbConfig["dbFilePath"] + 'main.db')
+
+                # look in the employee records for a restaurant with that UserName to get a UserID
+                conn = db_connect.connect()
+                getResult = conn.execute('SELECT UserID, RestaurantID from UserView WHERE UserName = ? AND Name = ?', (aJSON["username"], aJSON["restaurant"])) # Search for other users with this email
+                userRow = getResult.fetchone()
+                print("Res user(s) found:") 
+                print(userRow)
+                conn.close
+                if userRow is None:
+                    result["message"] = "Unable to find the user in that restaurant, please try again"
+                    return jsonify(result)
+                else:
+                    # ++ validate userID and password combination
+                    password = aJSON["password"] # <-- add decryption to this
+                    conn = db_connect.connect()
+                    getResult = conn.execute('SELECT UserID FROM Users WHERE Active = ? AND UserID = ? AND Password = ?', ("True", userRow[0], password)) # Search for other users with this email
+                    row = getResult.fetchone()
+                    print(row)
+                    conn.close
+                    # if no record with the same email is found, send the error
+                    if row is None:
+                        result["message"] = "Unable to find a user with that password, please try again"
+                        return jsonify("result")
+                    else:
+                        #update the Users last login
+                        lastLogin = datetime.now()
+                        #lastLogin = "2020-04-03"
+                        print(lastLogin)
+                        conn = db_connect.connect()
+                        sql = '''UPDATE Users 
+                            SET LastLogin = ? 
+                            WHERE UserID = ?'''
+                        aValues = (lastLogin, row[0])
+                        conn.execute(sql, aValues) 
+                        conn.close
+                        result["success"] = True
+                        result["value"] = {"UserID": userRow[0], "ResID": userRow[0], "resName": aJSON["restaurant"]}
+                        result["message"] = "Successfull login with that restaurant user"
+                        #Send back the users details for use with the application
+                        return jsonify(result)
+
+            else:
+                result["message"] = "Error - Unable to complete login request, the login type specified is not valid"
+                return jsonify(result)
+        
+        else: 
+            result["message"] = "Error - Unable to complete login request, a type was not found with the request"
             return jsonify(result)
+
 
 class AdminLogin(Resource):
     #  ARGS - <none>: Email, Password to verify user

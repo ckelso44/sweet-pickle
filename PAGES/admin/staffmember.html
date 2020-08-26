@@ -34,46 +34,58 @@
                 <fieldset>
                     <div id="restaurantDiv">
                         <h2>Staff Member Details</h2>
-                        <span>
-                            <label>full name: 
-                                <input type='text' id = 'name' onchange="enableSave()">
-                            </label>
-                        </span>
-                        <span>
-                            <label>user id: 
-                                <input type='text' id = 'userID' disabled>
-                            </label>
-                        </span>
-                        <span class="shortButton" id="editLoginSpan">
-                            <input type="button" class="activeButton" id="editLogin" value="Edit Login" onclick="editLogin()">
-                        </span>
-                        <br>
-                        <span>    
-                            <label>preferred name: 
-                                <input type='text' id = 'pName' onchange="enableSave()">
-                            </label>
-                            <!-- status section -->
-                            <div > <!--class="formRow"-->
-                                <div > <!--class="formColumnLabel"-->
-                                    <label for="status">status:</label>
-                                </div>
-                                <div > <!--class="formColumnValue"-->
-                                    <div class="selectList">
-                                        <select id="status" name="status">
-                                            <option value="New">New</option>
-                                            <option value="Existing">Existing</option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-                            <label>active: 
-                                <input type='checkbox' id = 'active' onchange="enableSave()" checked>
-                            </label>
+                        <div id="basics">
+                            <span>
+                                <label>full name: 
+                                    <input type='text' id = 'name' onchange="enableSave()">
+                                </label>
+                            </span>
+                            <span>    
+                                <label>preferred name: 
+                                    <input type='text' id = 'pName' onchange="enableSave()">
+                                </label>
+                            </span>
+                        </div>
+                        <!--basics -->
 
+                        <!-- section to be hidden with new staff member-->
+                        <div id="edits">
+                            <span id="userIDSpan">
+                                <label>user id: 
+                                    <input type='text' id = 'userID' disabled>
+                                </label>
+                            </span>
+                            <span class="shortButton" id="editLoginSpan">
+                                <input type="button" class="activeButton" id="editLogin" value="Edit Login" onclick="editLogin()">
+                            </span>
+                            <br>
+
+                            <!-- status section -->
+                            <div>
+                                <label for="status">status:</label>
+                            </div>
+                            <!--class="formColumnValue"-->
+                            <div class="selectList">
+                                <select id="status" name="status">
+                                    <option value="New">New</option>
+                                    <option value="Existing">Existing</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label>active: 
+                                    <input type='checkbox' id = 'active' onchange="enableSave()" checked>
+                                </label>
+                            </div>
+                        </div>
+                        <!-- permissions section-->
+                        <div id="permissions">
                             <h2>Permissions</h3>
-                            <h3>Take Sheets -<I> Coming soon!</I></h3>
-                        </span>
+                                <h3>Take Sheets -
+                                    <I> Coming soon!</I>
+                                </h3>
+                        </div>
                     </div>
+                    <!-- Buttons for form -->
                     <div>
                         <span class="buttonSpan">
                             <input type="button" class="disabledButton" id="saveBtn" value="Save Details" onclick="saveRes()" disabled>

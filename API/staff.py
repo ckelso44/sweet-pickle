@@ -57,7 +57,7 @@ class Staff(Resource):
             conn.close
             return jsonify(result)
         else:
-            return jsonify("invalid request - no resid found")
+            return jsonify(False)
 
     def post(self):
         print("Staff Post Requested")
@@ -86,7 +86,7 @@ class Staff(Resource):
                 uEmail = aJSON["Email"]
                 uName = aJSON["UserName"]
                 print(uEmail)
-                if uEmail != None or uEmail != "" :
+                if uEmail != None and uEmail != "" :
                     # look for a user with that email
                     query = 'SELECT UserID FROM Users WHERE Email = ?'
                     qResult = conn.execute(query, uEmail)
@@ -116,11 +116,11 @@ class Staff(Resource):
                             result['message'] = "An employee record with that UserID already exists for this restaurant. Talk to your admin or support if necessary."
                             return jsonify(result)
                         result['message'] = "An existing user with that email was connected to the restaurant."                            
-                elif uName != None or uName != "" :
-                    # look for a user with that email
-                    query = 'SELECT UserID FROM EmpView WHERE UserName = ? AND RestaurantID = ?'
-                    values = (uNameID, resID)
-                    qResult = conn.execute(query, uEmail)
+                elif uName != None and uName != "" :
+                    # look for a user with that UserName
+                    query = 'SELECT UserID FROM UserView WHERE UserName = ? AND RestaurantID = ?'
+                    values = (uName, resID)
+                    qResult = conn.execute(query, values)
                     conn.close
                     records = qResult.fetchall()
                     print(records)
@@ -143,11 +143,38 @@ class Staff(Resource):
                     staffData = newStaff.get_json(force=True)
                     staffID = staffData["StaffID"]
                     print(staffID) 
+            else:
+                #create a new staff member without a login
+                db_connect = create_engine(dbConfig["dbFilePath"] + resID + '.db')
+                conn = db_connect.connect()
+                postQuery = '''INSERT INTO Staff (
+                        FullName,
+                        PrefName,
+                        Status, 
+                        Active,
+                        CreateDate,
+                        CreateUser,
+                        ModDate,
+                        ModUser 
+                    ) VALUES (?,?,?,?,?,?,?,?)'''
+                postValues = (
+                    aJSON["FullName"], 
+                    aJSON["PrefName"], 
+                    "New", 
+                    True, 
+                    nowDate,
+                    aJSON['ModUser'], 
+                    nowDate, 
+                    aJSON['ModUser']) 
+            
+            postResult = conn.execute(postQuery, postValues)
+            conn.close
+            staffID = postResult.lastrowid
+            result['message'] = "A new staff member was created"
 
-            result['status'] = "Success"
-            result['value'] = staffID
-            return jsonify(result)
-
+        result['status'] = "Success"
+        result['value'] = staffID
+        return jsonify(result)
 
     def patch(self):
         print("Staff Patch Requested")

@@ -3,7 +3,7 @@
 <html>
 
 <head>
-    <title>Login - Sweet Pickle</title>
+    <title>Login - ResPro.io</title>
 
     <link rel="stylesheet" href="css/default.css">
 
@@ -11,23 +11,45 @@
     <script src="JS/login.js"></script>
 </head>
 
-<body>
+<body onload="loginOnLoad()">
     <div class="default">
-        <h2>Login to Sweet Pickle</h2>
-        <form>
+        <h2>Login to ResPro.io</h2>
+        <form autocomplete="new-password">
             <fieldset>
+                <p>login using either your email OR a user name for your restaurant</p>
+                <div class="divCenter">
+                    <span>
+                        <label class="basicLabel">email: 
+                            <input type='text' id = 'leml' onclick="clearUser()">
+                        </label>
+                    </span>
+                    <span>
+                        <label class="basicLabel">password: 
+                            <input type='password' id = 'lemlp' onclick="clearUser()">
+                        </label>
+                    </span>
+                </div>
+                <hr>
+                <div class="divCenter">
+                    <span>
+                        <label class="basicLabel">user name: 
+                            <input type='text' id = 'uNme' onclick="clearEmail()">
+                        </label>
+                    </span>
+                    <span>
+                        <label class="basicLabel">restaurant: 
+                            <input type='text' id = 'res' onclick="clearEmail()">
+                        </label>
+                    </span>
+                    <span>
+                        <label class="basicLabel">password: 
+                            <input type='password' id = 'uNmeP' onclick="clearEmail()">
+                        </label>
+                    </span>
+                </div>
                 <p class="errorMsg" id="loginErr" hidden>Your email and password do not match, please try again or register as a new user.</p>
-                <span><label class="basicLabel">email: 
-                        <input type='text' id = 'email' required>
-                    </label>
-                </span>
-                <span>
-                    <label class="basicLabel">password: 
-                        <input type='password' id = 'password' required>
-                    </label>
-                </span>
                 <span class="buttonSpan">
-                    <input type="button" id="login" value="Login" onclick="loginUser()">
+                    <input type="button" class="activeButton" id="login" value="Login" onclick="loginOnClick()">
                 </span>
                 <p>Forgot Password? No problem, <a href="forgotPassword.html">click here</a> to reset your password.</p>
 

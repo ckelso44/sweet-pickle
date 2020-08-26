@@ -4,9 +4,12 @@ from flask_restful import Resource, Api
 from flask_cors import CORS
 from sqlalchemy import create_engine
 from datetime import datetime
+from werkzeug import secure_filename
+import re 
+import csv
+
 # local files
 from config import comSettings
-import re # used to split the array returned from the database
 
 
 # PURPOSE - create a resource for retrieving the daily take sheet
@@ -234,7 +237,6 @@ class DailyTake(Resource):
                 dtID = postResult.lastrowid
                 return jsonify(dtID)
 
-
 class StaffTake(Resource):
 
     def get(self):
@@ -411,7 +413,6 @@ class StaffTake(Resource):
                 conn.close
                 return jsonify(stID)
 
-
 class Take(Resource):
 
     def get(self):
@@ -529,6 +530,24 @@ class DailyTakeByDate(Resource):
         else:
             return jsonify("invalid request - no resid found")
 
+class ImportTake(Resource):
+    
+    def post(self):
+        print("Import Take Requested")
+        reqDict = dict(request.args)
+        dbConfig = comSettings() 
+        
+        if "resID" not in reqDict:
+            return jsonify("ResID not specified")
+        else:
+            resID = reqDict["resID"]
+            f = request.files['file']
+            print (f)
+            fileLoc = dbConfig["importFilePath"] + "//" + resID + "//" + f.filename 
+            f.save(fileLoc)
 
-# 1000001
-#UPDATE Take SET Expected = (SELECT SUM(Expected)FROM TakeDetail WHERE Take.TakeID=TakeDetail.TakeID)
+            with open(fileLoc) as csv_file:
+                csv_reader = csv.DictReader(csv_file)
+                line_count = 0
+                print (csv_reader)
+                return jsonify('file uploaded successfully')

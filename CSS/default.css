@@ -46,6 +46,13 @@ div.default {
     max-width: 700px;
     margin: 0 auto;
     margin-bottom: 5px;
+    margin-top: 20px;
+}
+
+div.divCenter {
+    align-items: center;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 
@@ -76,6 +83,7 @@ label {
 
 .basicLabel {
     color: var(--Colour-0);
+    text-align: left;
 }
 
 fieldset {

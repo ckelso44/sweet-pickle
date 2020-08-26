@@ -260,21 +260,21 @@ function postStaff(userCreate) {
         var staffData = JSON.parse(this.response);
         // check the status of the request
         console.log(staffData)
-
-        var updateMsg = function() {
-            var modal = document.getElementById("msgModal");
-            modal.style.display = "none";
+        if (staffData["status"] == "Success") {
+            newURL = window.location.href + "?StaffID=" + staffData["value"]
+            var loadWithStaff = function() {
+                location.replace(newURL)
+            }
+            showMessage(staffData['message'], true, loadWithStaff)
+        } else {
+            var returnToPage = function() {
+                var modal = document.getElementById("msgModal");
+                modal.style.display = "none"
+            }
+            showMessage(staffData["message"], true, returnToPage)
         }
-        var msg = "Post was successful"
-        showMessage(msg, true, updateMsg)
-            // if the save was successful, 
-            //   create function to reload the page with the new StaffID    
-            //   post OK message an set
-            // if the staff name is a duplicate, send them back to the main page
-            // if the staff user name is a duplicate, reload the create login form for them to update
-            // if the staff email is a duplicate associate it to the restaurant
-
     }
+
 
     request.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
     request.send(empJSON);
@@ -384,13 +384,8 @@ function getLogin() {
     }
 }
 
-/**
- * Send the request to update the Staff Member
- */
-function newStaffMember() {
-    // ask if they want to create a login for the user
 
-}
+// ------------------ Functions for Staff Member Page ------------------------------------
 
 /**
  * Send the request to update the Staff Member
@@ -497,6 +492,6 @@ function staffMemberOnLoad() {
     if ("StaffID" in pageParams) {
         loadStaffMember(pageParams["StaffID"])
     } else {
-        document.getElementById("editLoginSpan").style.display = "none"
+        document.getElementById("edits").style.display = "none"
     }
 }

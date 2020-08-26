@@ -7,7 +7,7 @@ from datetime import datetime
 #local files
 from config import comSettings
 from admin import User, Restaurant, Employee, Login, AdminLogin
-from take import DailyTake, StaffTake, Take, DailyTakeByDate
+from take import DailyTake, StaffTake, Take, DailyTakeByDate, ImportTake
 from system import System
 from staff import Staff, ActiveStaff
 
@@ -56,6 +56,7 @@ api.add_resource(ActiveStaff, '/staff/active', methods=['GET'])
 api.add_resource(DailyTake, '/dailytake', methods=['GET', 'PATCH', 'POST'])
 api.add_resource(StaffTake, '/dailytake/stafftake', methods=['GET', 'POST', 'PATCH'])
 api.add_resource(Take, '/dailytake/stafftake/take', methods=['GET', 'PATCH'])
+api.add_resource(ImportTake, '/dailytake/import', methods=['POST'])
 api.add_resource(DailyTakeByDate, '/dailytake/bydate', methods=['GET'])
 api.add_resource(System, '/system', methods=['GET', 'POST'])
 

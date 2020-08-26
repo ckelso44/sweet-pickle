@@ -6,6 +6,12 @@ var gURL = 'http://127.0.0.1:5003'
 
 // Reference https://www.w3schools.com/js/js_cookies.asp
 
+/** SetCookie()
+ * set the values for a cookie
+ * @param {string} cname name of cookie
+ * @param {sting} cvalue value to store
+ * @param {number} exdays the number of days until the cookie should expire 
+ */
 function setCookie(cname, cvalue, exdays) {
     var d = new Date();
     d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
@@ -49,12 +55,13 @@ function CurrencyFormatted(amount) {
 // returns the user ID stored in the profile cookie
 function getUserID() {
     profile = JSON.parse(getCookie("spProfile"));
-    return Number(profile.userID);
+    return Number(profile.UserID);
 }
 
 //returns the restaurant ID stored in the profile cookie
 function getResID() {
     profile = JSON.parse(getCookie("spProfile"));
+
     return Number(profile.RestaurantID);
 }
 /**
@@ -168,12 +175,14 @@ function setMenu(Active, Type) {
             ["Home", "main.html"],
             ["Take Sheets", "PAGES\\take\\takeHome.html"],
             ["Administration", "PAGES\\admin\\restaurant.html"],
-            [profName, "PAGES\\profiles\\profile.html"]
+            [profName, "PAGES\\profiles\\profile.html"],
+            ["Say Goodbye", "logout.html"]
         ]
     } else if (Type == "Take") {
         var mainMenu = [
             ["Home", "../../main.html"],
-            ["Take Sheets", "takeHome.html"]
+            ["Take Sheets", "takeHome.html"],
+            ["Upload Take", "takeupload.html"]
         ]
     } else if (Type == "Admin") {
         var mainMenu = [
