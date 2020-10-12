@@ -1,0 +1,41 @@
+<!doctype html>
+
+<html>
+
+<head>
+    <title>Res Pro - Staff Admin</title>
+    <link rel="stylesheet" href="../../css/default.css">
+
+    <script src="../../JS/toolkit.js"></script>
+    <script src="../../JS/staff.js"></script>
+</head>
+
+<body onload="staffOnLoad()">
+    <!-- The sidebar -->
+    <div class="sidebar" id="navMenu"></div>
+
+    <!-- The breadcrumb menu -->
+    <ul class="breadcrumb">
+        <!--        
+            <li><a href="#">Home</a></li>
+            <li><a href="#">Pictures</a></li>
+            <li><a href="#">Summer 15</a></li>
+            -->
+        <li>Staff</li>
+    </ul>
+    <!-- Content -->
+    <div class="content">
+
+        <h1>List of Staff</h1>
+        <div>
+            <table id="staffTable"></table>
+        </div>
+        <div>
+            <span class="buttonSpan">
+                <input type="button" class="activeButton" id="newBtn" value="+ Staff" onclick="newStaff()">
+            </span>
+        </div>
+    </div>
+</body>
+
+</html>

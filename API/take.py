@@ -4,9 +4,14 @@ from flask_restful import Resource, Api
 from flask_cors import CORS
 from sqlalchemy import create_engine
 from datetime import datetime
+import traceback
+
+import re 
+import csv
+
 # local files
 from config import comSettings
-import re # used to split the array returned from the database
+
 
 
 # PURPOSE - create a resource for retrieving the daily take sheet
@@ -234,7 +239,6 @@ class DailyTake(Resource):
                 dtID = postResult.lastrowid
                 return jsonify(dtID)
 
-
 class StaffTake(Resource):
 
     def get(self):
@@ -334,13 +338,13 @@ class StaffTake(Resource):
                 # send the update for the daily take
                 patchQuery = '''UPDATE StaffTake
                     SET DailyTakeID = ?,
-                        EmployeeID = ?, 
+                        StaffID = ?, 
                         Shift = ?,
                         ModDate = ?,
                         ModUser = ?
                     WHERE StaffTakeID = ?'''
                 patchValues = (aJSON["DailyTakeID"], 
-                    aJSON["EmployeeID"], 
+                    aJSON["StaffID"], 
                     aJSON["Shift"], 
                     nowDate,
                     aJSON["UserID"], 
@@ -368,7 +372,7 @@ class StaffTake(Resource):
                 conn = db.connect()
                 postQuery = '''INSERT INTO StaffTake (
                         DailyTakeID,
-                        EmployeeID,
+                        StaffID,
                         Shift,
                         CreateDate,
                         CreateUser,
@@ -376,7 +380,7 @@ class StaffTake(Resource):
                         ModUser
                     ) VALUES (?,?,?,?,?,?,?)'''
                 postValues = (aJSON["DailyTakeID"], 
-                    aJSON["EmployeeID"],
+                    aJSON["StaffID"],
                     aJSON["Shift"], 
                     nowDate, 
                     aJSON["UserID"], 
@@ -410,7 +414,6 @@ class StaffTake(Resource):
                     conn.execute(postQuery, postValues)
                 conn.close
                 return jsonify(stID)
-
 
 class Take(Resource):
 
@@ -529,6 +532,41 @@ class DailyTakeByDate(Resource):
         else:
             return jsonify("invalid request - no resid found")
 
+class ImportTake(Resource):
+    
+    def post(self):
+        print("Import Take Requested")
+        reqDict = dict(request.args)
+        dbConfig = comSettings() 
+        
+        #check for values in URL
+        if "userID" not in reqDict:
+            return jsonify("UserID not supplied")
 
-# 1000001
-#UPDATE Take SET Expected = (SELECT SUM(Expected)FROM TakeDetail WHERE Take.TakeID=TakeDetail.TakeID)
+        if "resID" not in reqDict:
+            return jsonify("ResID not specified")
+
+        userID = reqDict["userID"]
+        resID = reqDict["resID"]
+        f = request.files['file']
+
+        fileLoc = dbConfig["importFilePath"] + "//" + resID + "//" + f.filename 
+        f.save(fileLoc)
+
+        dtFileTakes = readImport(fileLoc)
+        if dtFileTakes == False:
+            return ("Error processing file")
+        else:
+            # process the list of takes into a tree of DailyTakes, StaffTakes, and Payment Types
+            convertTake_result = convertTakeList(dtFileTakes) 
+            if convertTake_result["Status"] == True:
+                dtDict = convertTake_result["Value"]["DailyTakes"]
+            else:
+                return jsonify(False)
+            # prime the database
+            databaseConnection = dbConfig["dbFilePath"] + resID + '.db'
+            db = create_engine(databaseConnection)
+            conn = db.connect() 
+            #print (dtDict[0])
+            result = mergeDailyTakes(dtDict, conn, userID)
+            return jsonify(True)

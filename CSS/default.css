@@ -46,6 +46,13 @@ div.default {
     max-width: 700px;
     margin: 0 auto;
     margin-bottom: 5px;
+    margin-top: 20px;
+}
+
+div.divCenter {
+    align-items: center;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 
@@ -62,13 +69,13 @@ div.default {
 }
 
 p {
-    color: var(--Colour-1);
+    color: var(--Colour-0);
     font-size: large;
     text-align: left;
 }
 
 label {
-    color: var(--Colour-5);
+    color: var(--Colour-0);
     font-size: large;
     display: block;
     padding: 5px;
@@ -76,6 +83,7 @@ label {
 
 .basicLabel {
     color: var(--Colour-0);
+    text-align: left;
 }
 
 fieldset {
@@ -96,11 +104,42 @@ fieldset {
     border-radius: 10px;
 }
 
-input[type=button] {
+.shortButton {
+    background-color: var(--Colour-4);
+    padding: 2px;
+    display: inline-block;
+    margin: 20px;
+    border-radius: 10px;
+    width: 100px;
+}
+
+
+/* input[type=button] {
     color: var(--Colour-0);
     background-color: var(--Colour-4);
     border: none;
     cursor: pointer;
+    width: 100%;
+    font-size: larger;
+    padding: 10px;
+    border-radius: 10px;
+} */
+
+.activeButton {
+    color: var(--Colour-0);
+    background-color: var(--Colour-4);
+    border: none;
+    width: 100%;
+    font-size: larger;
+    padding: 10px;
+    border-radius: 10px;
+}
+
+.disabledButton {
+    color: var(--Colour-0);
+    background-color: var(--Colour-4);
+    filter: opacity(25%);
+    border: none;
     width: 100%;
     font-size: larger;
     padding: 10px;
@@ -110,8 +149,9 @@ input[type=button] {
 
 /* Add a hover effect for buttons */
 
-input[type=button]:hover {
+.activeButton:hover {
     background-color: var(--Colour-2);
+    cursor: pointer;
 }
 
 
@@ -134,6 +174,21 @@ input[type=button]:hover {
     box-shadow: 0px 0px 0px transparent;
     border: 0px solid transparent;
     text-shadow: 0px 0px 0px transparent;
+}
+
+
+/* -----------------------Table Settings ----------------------- */
+
+tr:hover {
+    background-color: var(--Highlight);
+    cursor: pointer;
+}
+
+table,
+th,
+td {
+    border: 1px solid var(--Colour-3);
+    border-collapse: collapse;
 }
 
 
@@ -414,6 +469,7 @@ ul.breadcrumb li a:hover {
 input[type=text],
 input[type=number],
 input[type=password],
+input[list],
 select,
 textarea {
     width: 100%;

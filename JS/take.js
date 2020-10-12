@@ -531,7 +531,7 @@ function loadTakeSheet(type, value) {
 
 function takeOnLoad() {
     // initialize the page and validate the user
-    setMenu()
+    setMenu("Take Sheets", "Take")
 
     //grab the date from the URL. If no date, assume today
     var pageParams = getParams(window.location.href)

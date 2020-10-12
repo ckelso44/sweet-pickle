@@ -6,6 +6,12 @@ var gURL = 'http://127.0.0.1:5003'
 
 // Reference https://www.w3schools.com/js/js_cookies.asp
 
+/** SetCookie()
+ * set the values for a cookie
+ * @param {string} cname name of cookie
+ * @param {sting} cvalue value to store
+ * @param {number} exdays the number of days until the cookie should expire 
+ */
 function setCookie(cname, cvalue, exdays) {
     var d = new Date();
     d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
@@ -49,12 +55,13 @@ function CurrencyFormatted(amount) {
 // returns the user ID stored in the profile cookie
 function getUserID() {
     profile = JSON.parse(getCookie("spProfile"));
-    return Number(profile.userID);
+    return Number(profile.UserID);
 }
 
 //returns the restaurant ID stored in the profile cookie
 function getResID() {
     profile = JSON.parse(getCookie("spProfile"));
+
     return Number(profile.RestaurantID);
 }
 /**
@@ -146,14 +153,54 @@ function validateUser() {
 }
 
 /**
- * Return a date in the format compatible to the database
- * @param  <none>
- * @return {string}     The date in a YYYY-MM-DD format
+ * Build the menu after validating the user
+ * @param  {String}     Active  The menu item that should be in context
+ * @param  {Type}       Type  The menu type to use
  */
-function setMenu() {
+function setMenu(Active, Type) {
     validateUser()
     var JSONProfile = getCookie("spProfile")
     objProfile = JSON.parse(JSONProfile)
-    document.getElementById("resName").innerHTML = objProfile.RestaurantName
-    document.getElementById("profile").innerHTML = "Profile: " + objProfile.PrefName
+
+    // build the The sidebar
+    var resName = document.createElement("p")
+    resName.innerHTML = objProfile.RestaurantName
+    resName.id = "resName"
+    document.getElementById("navMenu").appendChild(resName)
+
+    // <a href = "restaurant.html" class = "active" > My Restaurant < /a>
+    if (Type == "Main") {
+        var profName = "Profile: " + objProfile.FullName
+        var mainMenu = [
+            ["Home", "main.html"],
+            ["Take Sheets", "PAGES\\take\\takeHome.html"],
+            ["Administration", "PAGES\\admin\\restaurant.html"],
+            [profName, "PAGES\\profiles\\profile.html"],
+            ["Say Goodbye", "logout.html"]
+        ]
+    } else if (Type == "Take") {
+        var mainMenu = [
+            ["Home", "../../main.html"],
+            ["Take Sheets", "takeHome.html"],
+            ["Upload Take", "takeupload.html"]
+        ]
+    } else if (Type == "Admin") {
+        var mainMenu = [
+            ["Home", "../../main.html"],
+            ["My Restaurant", "restaurant.html"],
+            ["Staff", "staff.html"],
+            ["Operational Settings", "settings.html"]
+        ]
+    }
+    // loop through each menu item to build menu
+    for (var i = 0; i < mainMenu.length; i++) {
+        var menuItem = document.createElement("a")
+        menuDetails = mainMenu[i]
+        menuItem.innerHTML = menuDetails[0]
+        menuItem.href = menuDetails[1]
+        if (menuDetails[0] == Active) {
+            menuItem.className = "active"
+        }
+        document.getElementById('navMenu').appendChild(menuItem)
+    }
 }

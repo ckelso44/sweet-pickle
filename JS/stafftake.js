@@ -62,7 +62,7 @@ function newStaffTake(action) {
 
     var empObj = {
         "DailyTakeID": document.getElementById("dtID").value,
-        "EmployeeID": document.getElementById("staff").value,
+        "StaffID": document.getElementById("staff").value,
         "Shift": document.getElementById("shift").value,
         "UserID": objProfile.UserID
     };
@@ -96,7 +96,7 @@ function updateStaffTake(action) {
     var empObj = {
         "StaffTakeID": document.getElementById("stID").value,
         "DailyTakeID": document.getElementById("dtID").value,
-        "EmployeeID": document.getElementById("staff").value,
+        "StaffID": document.getElementById("staff").value,
         "Shift": document.getElementById("shift").value,
         "UserID": objProfile.UserID
     };
@@ -200,7 +200,7 @@ function loadTakes(stID) {
         stData = request.StaffTake[0];
         console.log(stData);
         document.getElementById("stTitle").innerHTML = "Take Entry for " + stData["Date"]
-        document.getElementById("staff").value = stData["EmployeeID"]
+        document.getElementById("staff").value = stData["StaffID"]
         document.getElementById("shift").value = stData["Shift"]
         document.getElementById("stID").value = stID
         document.getElementById("dtID").value = stData["DailyTakeID"]
@@ -348,7 +348,7 @@ function loadShifts() {
 function loadStaff(resID) {
     var request = new XMLHttpRequest() // Create a request variable and assign a new XMLHttpRequest object to it.
 
-    var resURL = gURL + '/employees/active?resID=' + resID;
+    var resURL = gURL + '/staff/active?resID=' + resID;
     console.log(resURL);
 
     request.open('GET', resURL, true) // Open a new connection, using the GET request on the URL endpoint
@@ -356,15 +356,15 @@ function loadStaff(resID) {
     request.onload = function() {
         // Begin accessing JSON data here
         var request = JSON.parse(this.response);
-        empData = request.Employees;
+        empData = request.Staff;
 
         //console.log(empData);
         for (var i = 0; i < empData.length; i++) {
             // <option value="10001">Lucy May</option>
-            var employee = empData[i]
+            var staff = empData[i]
             empOption = document.createElement("OPTION")
-            empOption.value = employee["EmployeeID"]
-            empOption.label = employee["FullName"]
+            empOption.value = staff["StaffID"]
+            empOption.label = staff["FullName"]
             document.getElementById("staff").appendChild(empOption)
         }
     }
@@ -409,7 +409,7 @@ function deleteStaffTake() {
 // prepare the form when it loads
 function stOnLoad() {
     // initialize the page and validate the user
-    setMenu()
+    setMenu("Take Sheets", "Take")
 
 
     // check for a ID's on the requestor URL
