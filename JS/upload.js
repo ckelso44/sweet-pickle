@@ -11,6 +11,48 @@ if (document.readyState === "complete") {
     document.addEventListener("DOMContentLoaded", createDropzoneMethods);
 }
 
+
+/**
+ * Post Request method to upload the files
+ */
+function upload_files(files) {
+    let upload_results = document.getElementById("upload_results_element");
+    let formData = new FormData(), // files object
+        request = new XMLHttpRequest();
+
+    console.log("Dropped " + String(files.length) + " files.");
+    for (let i = 0; i < files.length; i++) {
+        formData.append("file", files[i]);
+    }
+
+    var resURL = gURL + '/dailytake/import?resID=' + getResID() + '&userID=' + getUserID();
+
+
+    request.onreadystatechange = function() {
+        if (request.readyState === XMLHttpRequest.DONE) {
+            alert(request.responseText);
+        }
+
+        console.log(request.response);
+        upload_results.innerHTML = this.response;
+    }
+
+    console.log("Let's upload files: ", formData);
+
+    request.open('POST', resURL, true); // async = true
+
+    // request.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+
+    request.send(formData);
+}
+
+
+//--------------------------- My Main functions ---------------------------------------------
+
+
+/**
+ * Create the methods for the dropzone object to upload the file
+ */
 function createDropzoneMethods() {
     let dropzone = document.getElementById("dropzone_element");
 
@@ -37,104 +79,22 @@ function createDropzoneMethods() {
     }
 }
 
-function upload_files(files) {
-    let upload_results = document.getElementById("upload_results_element");
-    let formData = new FormData(), // files object
-        request = new XMLHttpRequest();
 
-    console.log("Dropped " + String(files.length) + " files.");
-    for (let i = 0; i < files.length; i++) {
-        formData.append("file", files[i]);
-    }
+/**
+ * Upload the selected file if the button method was used
+ */
+function clickUploadFile() {
+    console.log("Upload file")
+    var myfile = document.getElementById("myfile")
 
-    var resURL = gURL + '/dailytake/import?resID=' + getResID();
-
-
-    request.onreadystatechange = function() {
-        if (request.readyState === XMLHttpRequest.DONE) {
-            alert(request.responseText);
-        }
-
-        console.log(request.response);
-        upload_results.innerHTML = this.response;
-    }
-
-    console.log("Let's upload files: ", formData);
-
-    request.open('POST', resURL, true); // async = true
-
-    // request.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-
-    request.send(formData);
+    let file = myfile.files
+    console.log(file)
+    upload_files(file)
 }
-
-
-//--------------------------- My Main functions ---------------------------------------------
-
 /**
  * Main function to load the upload page
  */
 function uploadOnLoad() {
     console.log("OnLoad page")
     setMenu("Upload Take", "Take")
-}
-
-
-/**
- * Upload the selected file
- * @param {File}    File The File blob to be posted
- */
-function postFile(File) {
-
-    let upload_results = document.getElementById("myfile");
-    let formData = new FormData(), // files object
-        request = new XMLHttpRequest();
-
-    console.log("Selected " + String(files.length) + " files.");
-    for (let i = 0; i < files.length; i++) {
-        formData.append("file", files[i]);
-    }
-
-    var resURL = gURL + '/dailytake/import?resID=' + getResID();
-
-    request.open('POST', resURL, true);
-
-    request.onload = function() {
-        // Begin accessing JSON data here
-        var result = JSON.parse(this.response);
-        if (result == true) {
-            console.log("successful post")
-        } else {
-            console.log("failed to post")
-        }
-    }
-
-    //request.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-
-    request.send(empJSON);
-}
-
-
-/**
- * Upload the selected file
- */
-function uploadFile() {
-    console.log("Upload file")
-    var myfile = document.getElementById("myfile")
-
-    let file = myfile.files[0]
-    console.log(file)
-    postFile(file)
-    let reader = new FileReader();
-
-    reader.readAsArrayBuffer(file);
-
-    reader.onload = function() {
-        console.log(reader.result);
-        //postFile(reader.result)
-    };
-
-    reader.onerror = function() {
-        console.log(reader.error);
-    };
 }

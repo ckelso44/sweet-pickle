@@ -4,12 +4,14 @@ from flask_restful import Resource, Api
 from flask_cors import CORS
 from sqlalchemy import create_engine
 from datetime import datetime
-from werkzeug import secure_filename
+import traceback
+
 import re 
 import csv
 
 # local files
 from config import comSettings
+
 
 
 # PURPOSE - create a resource for retrieving the daily take sheet
@@ -537,17 +539,34 @@ class ImportTake(Resource):
         reqDict = dict(request.args)
         dbConfig = comSettings() 
         
+        #check for values in URL
+        if "userID" not in reqDict:
+            return jsonify("UserID not supplied")
+
         if "resID" not in reqDict:
             return jsonify("ResID not specified")
-        else:
-            resID = reqDict["resID"]
-            f = request.files['file']
-            print (f)
-            fileLoc = dbConfig["importFilePath"] + "//" + resID + "//" + f.filename 
-            f.save(fileLoc)
 
-            with open(fileLoc) as csv_file:
-                csv_reader = csv.DictReader(csv_file)
-                line_count = 0
-                print (csv_reader)
-                return jsonify('file uploaded successfully')
+        userID = reqDict["userID"]
+        resID = reqDict["resID"]
+        f = request.files['file']
+
+        fileLoc = dbConfig["importFilePath"] + "//" + resID + "//" + f.filename 
+        f.save(fileLoc)
+
+        dtFileTakes = readImport(fileLoc)
+        if dtFileTakes == False:
+            return ("Error processing file")
+        else:
+            # process the list of takes into a tree of DailyTakes, StaffTakes, and Payment Types
+            convertTake_result = convertTakeList(dtFileTakes) 
+            if convertTake_result["Status"] == True:
+                dtDict = convertTake_result["Value"]["DailyTakes"]
+            else:
+                return jsonify(False)
+            # prime the database
+            databaseConnection = dbConfig["dbFilePath"] + resID + '.db'
+            db = create_engine(databaseConnection)
+            conn = db.connect() 
+            #print (dtDict[0])
+            result = mergeDailyTakes(dtDict, conn, userID)
+            return jsonify(True)
